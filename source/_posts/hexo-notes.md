@@ -34,3 +34,28 @@ hexo deploy # 可以简写 hexo d
 
 
 
+## 更换电脑后如何重新部署hexo
+
+
+
+1、安装nodejs
+
+2、 npm install hexo
+
+3、创建文件夹然后运行
+
+```shell
+hexo init
+
+```
+
+4、拉取远程dev分支
+
+```shell
+git clone -b dev git@github.com:Taurus-ZSZ/Taurus-ZSZ.github.io.git /e/200-Learning/240_myblog/123
+```
+
+ 5、复制123文件下的所有到Taurus-ZSZ.github.io文件夹下，覆盖掉hexo init 生成的文件
+
+就可以了
+

@@ -345,6 +345,8 @@ MultiBoot 功能使FPGA可以选择加载一个在flash中指定地址的bitstre
 
 ![image-20210910235559430](Xilinx-Remote-Update/image-20210910235559430.png)
 
+**注意：** 关于更多的BITSTREAM 的属性设置请阅读ug908
+
 #### Golden design XDC 设置
 
 打开golden design 的.XDC文件，添加以下设置：
@@ -377,6 +379,10 @@ set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 1 [current_design]
 ```
 
 **Note:** 默认的SPI_BUSWIDTH 是X1的，在实际的工程设计中需要根据实际的硬件设计做出调整。
+
+**特别说明：关于 SPI_32BIT_ADDR 的注意点** 
+
+如果所使用的spi flash 的容量>=256Mb 可以在xdc中set_property BITSTREAM.CONFIG.SPI_32BIT_ADDR YES [current_design] 来启用32bit 的地址，但是注意golden 与 update 两个镜像的SPI_32BIT_ADDR 需要保持一至。
 
 #### 约束解释	
 

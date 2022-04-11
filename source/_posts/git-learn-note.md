@@ -1829,3 +1829,15 @@ $ git stash pop
 $ git archive
 ```
 
+
+
+关于git clone 只有master分支的问题：
+
+
+
+```shell
+
+#克隆指定的分支 到指定文件夹
+git clone -b dev git@github.com:Taurus-ZSZ/Taurus-ZSZ.github.io.git /e/200-Learning/240_myblog/123
+```
+
