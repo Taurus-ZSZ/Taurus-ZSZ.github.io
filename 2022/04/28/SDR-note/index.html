@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","version":"8.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="软件无线电软件无线电平台Pluto SDR  可以将ad9363破解成9364 相关资源：  github上有固件 ADI的官方资料 可以配合matlab使用 B站zero_idea大佬的pluto-SDR使用培训   936X相关资源 B站尤老师讲解的关于936X的视频 注意第一节是一个整体的概括，包含了如何从github上移植工程的整体流程 第二节使用iddr原语设计rx_data接收相关的c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SDR_note">
+<meta property="og:url" content="http://example.com/2022/04/28/SDR-note/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="软件无线电软件无线电平台Pluto SDR  可以将ad9363破解成9364 相关资源：  github上有固件 ADI的官方资料 可以配合matlab使用 B站zero_idea大佬的pluto-SDR使用培训   936X相关资源 B站尤老师讲解的关于936X的视频 注意第一节是一个整体的概括，包含了如何从github上移植工程的整体流程 第二节使用iddr原语设计rx_data接收相关的c">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/04/28/SDR-note/adalm-pluto-photo.jpg">
+<meta property="og:image" content="http://example.com/2022/04/28/SDR-note/image-20220428210131476.png">
+<meta property="og:image" content="http://example.com/2022/04/28/SDR-note/rtl-sdr.jpg">
+<meta property="article:published_time" content="2022-04-28T12:40:33.000Z">
+<meta property="article:modified_time" content="2022-04-29T08:10:23.066Z">
+<meta property="article:author" content="zsz">
+<meta property="article:tag" content="SDR">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/04/28/SDR-note/adalm-pluto-photo.jpg">
+
+
+<link rel="canonical" href="http://example.com/2022/04/28/SDR-note/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/04/28/SDR-note/","path":"2022/04/28/SDR-note/","title":"SDR_note"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>SDR_note | Hexo</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Hexo</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">遇见美好的每天</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">19</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">8</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">21</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BD%AF%E4%BB%B6%E6%97%A0%E7%BA%BF%E7%94%B5"><span class="nav-number">1.</span> <span class="nav-text">软件无线电</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%AF%E4%BB%B6%E6%97%A0%E7%BA%BF%E7%94%B5%E5%B9%B3%E5%8F%B0"><span class="nav-number">1.1.</span> <span class="nav-text">软件无线电平台</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Pluto-SDR"><span class="nav-number">1.1.1.</span> <span class="nav-text">Pluto SDR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RTL-SDR"><span class="nav-number">1.1.2.</span> <span class="nav-text">RTL-SDR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HackrF"><span class="nav-number">1.1.3.</span> <span class="nav-text">HackrF</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Airspy"><span class="nav-number">1.1.4.</span> <span class="nav-text">Airspy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LimeSDR"><span class="nav-number">1.1.5.</span> <span class="nav-text">LimeSDR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tinysdr"><span class="nav-number">1.1.6.</span> <span class="nav-text">tinysdr</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%86%E7%9B%98ZX"><span class="nav-number">1.1.7.</span> <span class="nav-text">圆盘ZX</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SDR%E8%BD%AF%E4%BB%B6"><span class="nav-number">1.2.</span> <span class="nav-text">SDR软件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SDR"><span class="nav-number">1.2.1.</span> <span class="nav-text">SDR#</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#radio"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">radio</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GnuRadio"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">GnuRadio</span></a></li></ol></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zsz</p>
+  <div class="site-description" itemprop="description">不负光阴韶华</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/28/SDR-note/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zsz">
+      <meta itemprop="description" content="不负光阴韶华">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SDR_note
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-04-28 20:40:33" itemprop="dateCreated datePublished" datetime="2022-04-28T20:40:33+08:00">2022-04-28</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2022-04-29 16:10:23" itemprop="dateModified" datetime="2022-04-29T16:10:23+08:00">2022-04-29</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="软件无线电"><a href="#软件无线电" class="headerlink" title="软件无线电"></a>软件无线电</h1><h2 id="软件无线电平台"><a href="#软件无线电平台" class="headerlink" title="软件无线电平台"></a>软件无线电平台</h2><h3 id="Pluto-SDR"><a href="#Pluto-SDR" class="headerlink" title="Pluto SDR"></a>Pluto SDR</h3><p><img src="/2022/04/28/SDR-note/adalm-pluto-photo.jpg" alt="adalm-pluto-photo.jpg"></p>
+<p><img src="/2022/04/28/SDR-note/image-20220428210131476.png" alt="image-20220428210131476"></p>
+<p>可以将ad9363破解成9364</p>
+<p><strong>相关资源：</strong></p>
+<ol>
+<li>github上有固件</li>
+<li>ADI的官方资料</li>
+<li>可以配合matlab使用<ul>
+<li>B站zero_idea大佬的<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1i4411z7ft?spm_id_from=333.999.0.0">pluto-SDR使用培训</a></li>
+</ul>
+</li>
+<li>936X相关资源<ul>
+<li>B站尤老师讲解的关于<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Ff4y1B7RM?spm_id_from=333.337.search-card.all.click">936X的视频</a><ul>
+<li>注意第一节是一个整体的概括，包含了如何从github上移植工程的整体流程</li>
+<li>第二节使用iddr原语设计rx_data接收相关的clk,frame,data</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="RTL-SDR"><a href="#RTL-SDR" class="headerlink" title="RTL-SDR"></a>RTL-SDR</h3><p>最初由电视棒改装而来，入门级的。建议买V3版的，那个银白色的版本</p>
+<p>索取安装手册，想办法让卖家帮忙安装驱动。</p>
+<p><strong>相关资源：</strong></p>
+<ol>
+<li>开源实验室有讲如何使用rtl-sdr与matlab结合</li>
+<li>bilibili有相关的视频</li>
+<li>matlab相关的包</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="https://www.rtl-sdr.com/">官网</a></p>
+<p><img src="/2022/04/28/SDR-note/rtl-sdr.jpg" alt="rtl-sdr"></p>
+<h3 id="HackrF"><a href="#HackrF" class="headerlink" title="HackrF"></a>HackrF</h3><p>驱动不好装，另外，建议做发射试验，接收较差。</p>
+<p>原版（1000）不好买，国内的好多都是抄板的（500-600）。</p>
+<p>带射频功能的，如果有可科学实验，和编程基础的话可以拿来学习测试。</p>
+<h3 id="Airspy"><a href="#Airspy" class="headerlink" title="Airspy"></a>Airspy</h3><p>1000左右</p>
+<p>免驱，</p>
+<p>专业的sdr平台。接收性能比较好。</p>
+<h3 id="LimeSDR"><a href="#LimeSDR" class="headerlink" title="LimeSDR"></a>LimeSDR</h3><p>开源的sdr</p>
+<h3 id="tinysdr"><a href="#tinysdr" class="headerlink" title="tinysdr"></a><strong><a target="_blank" rel="noopener" href="https://github.com/uw-x/tinysdr">tinysdr</a></strong></h3><p>GitHub上有相关的资源</p>
+<h3 id="圆盘ZX"><a href="#圆盘ZX" class="headerlink" title="圆盘ZX"></a>圆盘ZX</h3><p>接收AM,FM 天线</p>
+<p>圆盘上有IPEX,买个IPEX头子的 那种收音机天线就行了</p>
+<h2 id="SDR软件"><a href="#SDR软件" class="headerlink" title="SDR软件"></a>SDR软件</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://airspy.com/download/">SDR#</a></li>
+<li>HDSDR(闭源)</li>
+<li>SDRuno</li>
+<li>gnuradio</li>
+</ol>
+<h3 id="SDR"><a href="#SDR" class="headerlink" title="SDR#"></a>SDR#</h3><p><strong>相关资源：</strong></p>
+<ol>
+<li>哔哩哔哩上有关于sdr#的使用视频</li>
+<li>csdn上有关于sdr#的源码讲解</li>
+<li>github上有源码(不知是哪一版的)</li>
+</ol>
+<h4 id="radio"><a href="#radio" class="headerlink" title="radio"></a>radio</h4><p>用于解调模式选项卡</p>
+<ul>
+<li>NFM :窄频调制</li>
+<li>WFM：宽频调制：可用于广播的收听</li>
+<li>AM :调幅</li>
+<li>LSB,USB:调幅单边带</li>
+<li>DSB:双边带</li>
+<li>CW:连续波调制</li>
+<li>RAW:用于记录和收听原始数据。</li>
+</ul>
+<h4 id="GnuRadio"><a href="#GnuRadio" class="headerlink" title="GnuRadio"></a>GnuRadio</h4><p><strong>相关资源：</strong></p>
+<ol>
+<li>B站tt大佬有讲解gnuradio入门</li>
+<li>开源实验室有讲gnuradio的视频</li>
+<li>Github</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/SDR/" rel="tag"># SDR</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/04/26/FIR-Filter/" rel="prev" title="FIR_Filter">
+                  <i class="fa fa-chevron-left"></i> FIR_Filter
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zsz</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

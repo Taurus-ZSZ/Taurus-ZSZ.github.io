@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","version":"8.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="[TOC] Master SPI Configuration Mode7 Series FPGA SPI x1&#x2F;x2 Configuration Interface Master SPI Quad (x4) 烧录文件的格式：下表是关于Xilinx 配置文件的格式总结   Bit Swapping比特交换是在一个字节内进行bit交换。MCS格式的编程文件总是位交换的，对于SPI 配置模式的标称文件除">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Xilinx_Remote_Update">
+<meta property="og:url" content="http://example.com/2021/09/06/Xilinx-Remote-Update/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="[TOC] Master SPI Configuration Mode7 Series FPGA SPI x1&#x2F;x2 Configuration Interface Master SPI Quad (x4) 烧录文件的格式：下表是关于Xilinx 配置文件的格式总结   Bit Swapping比特交换是在一个字节内进行bit交换。MCS格式的编程文件总是位交换的，对于SPI 配置模式的标称文件除">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2021/09/06/Xilinx-Remote-Update/image-20210911044855148.png">
+<meta property="og:image" content="http://example.com/2021/09/06/Xilinx-Remote-Update/image-20210911051900303.png">
+<meta property="og:image" content="http://example.com/2021/09/06/Xilinx-Remote-Update/image-20210911060220267.png">
+<meta property="og:image" content="http://example.com/2021/09/06/Xilinx-Remote-Update/image-20210911060314926.png">
+<meta property="og:image" content="http://example.com/2021/09/06/Xilinx-Remote-Update/image-20210911165335949.png">
+<meta property="og:image" content="http://example.com/2021/09/06/Xilinx-Remote-Update/image-20210911172830408.png">
+<meta property="og:image" content="http://example.com/2021/09/06/Xilinx-Remote-Update/image-20210911172848807.png">
+<meta property="og:image" content="http://example.com/2021/09/06/Xilinx-Remote-Update/image-20210911182542201.png">
+<meta property="og:image" content="http://example.com/2021/09/06/Xilinx-Remote-Update/image-20210911182835293.png">
+<meta property="og:image" content="http://example.com/2021/09/06/Xilinx-Remote-Update/image-20210912051049852.png">
+<meta property="og:image" content="http://example.com/2021/09/06/Xilinx-Remote-Update/image-20210912051528269.png">
+<meta property="og:image" content="http://example.com/2021/09/06/Xilinx-Remote-Update/image-20210912065459274.png">
+<meta property="og:image" content="http://example.com/2021/09/06/Xilinx-Remote-Update/image-20210912065948490.png">
+<meta property="og:image" content="http://example.com/2021/09/06/Xilinx-Remote-Update/image-20210912070325000.png">
+<meta property="og:image" content="http://example.com/2021/09/06/Xilinx-Remote-Update/image-20210912161249151.png">
+<meta property="og:image" content="http://example.com/2021/09/06/Xilinx-Remote-Update/image-20210912161854185.png">
+<meta property="og:image" content="http://example.com/2021/09/06/Xilinx-Remote-Update/image-20210912161911978.png">
+<meta property="og:image" content="http://example.com/2021/09/06/Xilinx-Remote-Update/image-20210912161937666.png">
+<meta property="og:image" content="http://example.com/2021/09/06/Xilinx-Remote-Update/image-20210910010529284.png">
+<meta property="og:image" content="http://example.com/2021/09/06/Xilinx-Remote-Update/image-20210910154920233.png">
+<meta property="og:image" content="http://example.com/2021/09/06/Xilinx-Remote-Update/image-20210910183544763.png">
+<meta property="og:image" content="http://example.com/2021/09/06/Xilinx-Remote-Update/image-20210910215054742.png">
+<meta property="og:image" content="http://example.com/2021/09/06/Xilinx-Remote-Update/image-20210910235559430.png">
+<meta property="og:image" content="http://example.com/2021/09/06/Xilinx-Remote-Update/image-20210911003430889.png">
+<meta property="og:image" content="http://example.com/2021/09/06/Xilinx-Remote-Update/image-20210911003722775.png">
+<meta property="article:published_time" content="2021-09-05T17:25:59.000Z">
+<meta property="article:modified_time" content="2022-04-11T15:45:54.068Z">
+<meta property="article:author" content="zsz">
+<meta property="article:tag" content="Xilinx">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/09/06/Xilinx-Remote-Update/image-20210911044855148.png">
+
+
+<link rel="canonical" href="http://example.com/2021/09/06/Xilinx-Remote-Update/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2021/09/06/Xilinx-Remote-Update/","path":"2021/09/06/Xilinx-Remote-Update/","title":"Xilinx_Remote_Update"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Xilinx_Remote_Update | Hexo</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Hexo</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">遇见美好的每天</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">19</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">8</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">21</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Master-SPI-Configuration-Mode"><span class="nav-number">1.</span> <span class="nav-text">Master SPI Configuration Mode</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-Series-FPGA-SPI-x1-x2-Configuration-Interface"><span class="nav-number">1.1.</span> <span class="nav-text">7 Series FPGA SPI x1&#x2F;x2 Configuration Interface</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Master-SPI-Quad-x4"><span class="nav-number">1.2.</span> <span class="nav-text">Master SPI Quad (x4)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%83%A7%E5%BD%95%E6%96%87%E4%BB%B6%E7%9A%84%E6%A0%BC%E5%BC%8F%EF%BC%9A"><span class="nav-number">2.</span> <span class="nav-text">烧录文件的格式：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Bit-Swapping"><span class="nav-number">2.1.</span> <span class="nav-text">Bit Swapping</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%8C%85"><span class="nav-number">3.</span> <span class="nav-text">配置包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Packet-Types"><span class="nav-number">3.1.</span> <span class="nav-text">Packet Types</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Type-1-Packet"><span class="nav-number">3.1.1.</span> <span class="nav-text">Type 1 Packet</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Type-2-Packet"><span class="nav-number">3.1.2.</span> <span class="nav-text">Type 2 Packet</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%AF%84%E5%AD%98%E5%99%A8"><span class="nav-number">4.</span> <span class="nav-text">配置寄存器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%A4%9A%E5%BC%95%E5%AF%BC%E5%90%AF%E5%8A%A8"><span class="nav-number">5.</span> <span class="nav-text">重配置与多引导启动</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9E%E9%80%80%E4%B8%8E%E5%A4%9A%E5%BC%95%E5%AF%BC%E5%90%AF%E5%8A%A8"><span class="nav-number">5.1.</span> <span class="nav-text">回退与多引导启动</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">5.1.1.</span> <span class="nav-text">概述</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%A7%A6%E5%8F%91%E5%9B%9E%E9%80%80%E7%9A%84%E6%83%85%E5%86%B5"><span class="nav-number">5.1.1.1.</span> <span class="nav-text">触发回退的情况</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Golden-Image-Initial-System-Setup"><span class="nav-number">5.1.2.</span> <span class="nav-text">Golden Image Initial System Setup</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Initial-MultiBoot-Image-System-Setup"><span class="nav-number">5.1.3.</span> <span class="nav-text">Initial MultiBoot Image System Setup</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MultiBoot-%E5%92%8C-Fallback-%E7%9A%84%E8%BF%87%E7%A8%8B%E8%AF%A6%E7%BB%86%E4%BF%A1%E6%81%AF"><span class="nav-number">5.1.4.</span> <span class="nav-text">MultiBoot 和 Fallback 的过程详细信息</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#IPROG"><span class="nav-number">5.1.4.1.</span> <span class="nav-text">IPROG</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#WBSTAR-Register"><span class="nav-number">5.1.4.2.</span> <span class="nav-text">WBSTAR Register</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Watchdog-Timer"><span class="nav-number">5.1.4.3.</span> <span class="nav-text">Watchdog Timer</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#RS-Pins"><span class="nav-number">5.1.4.4.</span> <span class="nav-text">RS Pins</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IPROG-Reconfiguration"><span class="nav-number">5.2.</span> <span class="nav-text">IPROG Reconfiguration</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8ICAPE2%E7%9A%84IPROG"><span class="nav-number">5.2.1.</span> <span class="nav-text">使用ICAPE2的IPROG</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B5%8C%E5%85%A5%E5%9C%A8Bitdtream-%E7%9A%84IPROG"><span class="nav-number">5.2.2.</span> <span class="nav-text">嵌入在Bitdtream 的IPROG</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9E%E9%80%80%E5%92%8C-IPROG-%E9%87%8D%E6%96%B0%E9%85%8D%E7%BD%AE%E7%9A%84%E7%8A%B6%E6%80%81%E5%AF%84%E5%AD%98%E5%99%A8"><span class="nav-number">5.3.</span> <span class="nav-text">回退和 IPROG 重新配置的状态寄存器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9C%8B%E9%97%A8%E7%8B%97"><span class="nav-number">5.4.</span> <span class="nav-text">看门狗</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9AFPGA%E9%85%8D%E7%BD%AE"><span class="nav-number">6.</span> <span class="nav-text">多FPGA配置</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%9C%E7%A8%8B%E6%9B%B4%E6%96%B0"><span class="nav-number"></span> <span class="nav-text">远程更新</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Critical-Switch-Word"><span class="nav-number"></span> <span class="nav-text">Critical Switch Word</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#BPI-%E4%B8%8ESPI%E9%85%8D%E7%BD%AE%E6%A8%A1%E5%BC%8F%E4%B8%8B%E7%9A%84%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-number">0.1.</span> <span class="nav-text">BPI 与SPI配置模式下的关键字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bus-width-auto-detection-word"><span class="nav-number">0.2.</span> <span class="nav-text">bus width auto detection word</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SPI-mode"><span class="nav-number">0.2.1.</span> <span class="nav-text">SPI mode</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sync-word-0XAA995566"><span class="nav-number">0.3.</span> <span class="nav-text">Sync word(0XAA995566)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NOR-Flash%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">NOR Flash简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E6%96%B0%E7%BC%96%E7%A8%8BNOR-Flash%E7%9A%84%E8%BF%87%E7%A8%8B%EF%BC%9A"><span class="nav-number">1.1.</span> <span class="nav-text">重新编程NOR Flash的过程：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8ESPI%E7%9A%84%E5%AE%B9%E9%87%8F%E4%B8%8E%E4%BD%8D%E5%AE%BD"><span class="nav-number">1.2.</span> <span class="nav-text">关于SPI的容量与位宽</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#General-Mapping-of-QuickBoot-Components-Within-Flash-Memory"><span class="nav-number">2.</span> <span class="nav-text">General Mapping of QuickBoot Components Within Flash Memory</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Detailed-Mapping-of-QuickBoot-Components-to-SPI-Flash-Memory"><span class="nav-number">2.1.</span> <span class="nav-text">Detailed Mapping of QuickBoot Components to SPI Flash Memory</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E5%BC%95%E5%AF%BC%E9%85%8D%E7%BD%AEFPGA-SPI-mode"><span class="nav-number">3.</span> <span class="nav-text">多引导配置FPGA SPI mode</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E5%BC%95%E5%AF%BC%E5%9F%BA%E7%A1%80"><span class="nav-number">3.1.</span> <span class="nav-text">多引导基础</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%A4%E7%A7%8D%E5%AE%9E%E7%8E%B0MulitBoot%E7%9A%84%E6%96%B9%E6%B3%95%EF%BC%9A"><span class="nav-number">4.</span> <span class="nav-text">两种实现MulitBoot的方法：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PROG%E5%B5%8C%E5%85%A5%E6%AF%94%E7%89%B9%E6%B5%81%E7%9A%84Mulitboot%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F"><span class="nav-number">5.</span> <span class="nav-text">PROG嵌入比特流的Mulitboot实现方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#golden-bitstream-%E5%92%8C-update-bitstream-XDC%E8%AE%BE%E7%BD%AE"><span class="nav-number">5.1.</span> <span class="nav-text">golden bitstream 和 update bitstream  XDC设置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Golden-design-XDC-%E8%AE%BE%E7%BD%AE"><span class="nav-number">5.1.1.</span> <span class="nav-text">Golden design XDC 设置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Update-design-XDC-%E8%AE%BE%E7%BD%AE"><span class="nav-number">5.1.2.</span> <span class="nav-text">Update design XDC 设置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BA%A6%E6%9D%9F%E8%A7%A3%E9%87%8A"><span class="nav-number">5.1.3.</span> <span class="nav-text">约束解释</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8tcl%E6%8C%87%E4%BB%A4%E7%94%9F%E6%88%90SPI-FLASH-%E7%BC%96%E7%A8%8B%E6%96%87%E4%BB%B6"><span class="nav-number">5.1.4.</span> <span class="nav-text">使用tcl指令生成SPI FLASH 编程文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Debug"><span class="nav-number">5.1.5.</span> <span class="nav-text">Debug</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%88%90%E5%8A%9F%E8%B7%B3%E8%BD%AC%EF%BC%9A"><span class="nav-number">5.1.5.1.</span> <span class="nav-text">成功跳转：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%94%B1CRC%E9%94%99%E8%AF%AF%E8%A7%A6%E5%8F%91%E7%9A%84%E5%9B%9E%E9%80%80"><span class="nav-number">5.1.5.2.</span> <span class="nav-text">由CRC错误触发的回退</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98"><span class="nav-number">6.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E6%A1%A3%EF%BC%9A"><span class="nav-number">7.</span> <span class="nav-text">参考文档：</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zsz</p>
+  <div class="site-description" itemprop="description">不负光阴韶华</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/09/06/Xilinx-Remote-Update/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zsz">
+      <meta itemprop="description" content="不负光阴韶华">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Xilinx_Remote_Update
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-09-06 01:25:59" itemprop="dateCreated datePublished" datetime="2021-09-06T01:25:59+08:00">2021-09-06</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2022-04-11 23:45:54" itemprop="dateModified" datetime="2022-04-11T23:45:54+08:00">2022-04-11</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/FPGA/" itemprop="url" rel="index"><span itemprop="name">FPGA</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>[TOC]</p>
+<h2 id="Master-SPI-Configuration-Mode"><a href="#Master-SPI-Configuration-Mode" class="headerlink" title="Master SPI Configuration Mode"></a>Master SPI Configuration Mode</h2><h3 id="7-Series-FPGA-SPI-x1-x2-Configuration-Interface"><a href="#7-Series-FPGA-SPI-x1-x2-Configuration-Interface" class="headerlink" title="7 Series FPGA SPI x1/x2 Configuration Interface"></a>7 Series FPGA SPI x1/x2 Configuration Interface</h3><p><img src="/2021/09/06/Xilinx-Remote-Update/image-20210911044855148.png" alt="image-20210911044855148"></p>
+<h3 id="Master-SPI-Quad-x4"><a href="#Master-SPI-Quad-x4" class="headerlink" title="Master SPI Quad (x4)"></a>Master SPI Quad (x4)</h3><p><img src="/2021/09/06/Xilinx-Remote-Update/image-20210911051900303.png" alt="image-20210911051900303"></p>
+<h2 id="烧录文件的格式："><a href="#烧录文件的格式：" class="headerlink" title="烧录文件的格式："></a>烧录文件的格式：</h2><p>下表是关于Xilinx 配置文件的格式总结</p>
+<p><img src="/2021/09/06/Xilinx-Remote-Update/image-20210911060220267.png" alt="image-20210911060220267"></p>
+<p><img src="/2021/09/06/Xilinx-Remote-Update/image-20210911060314926.png" alt="image-20210911060314926"></p>
+<h3 id="Bit-Swapping"><a href="#Bit-Swapping" class="headerlink" title="Bit Swapping"></a>Bit Swapping</h3><p>比特交换是在一个字节内进行bit交换。MCS格式的编程文件总是位交换的，对于SPI 配置模式的标称文件除外。对于BIT,RBT,BIN格式的编程文件是从来不进行位交换的。HEX格式的编程文件，是否位交换取决于用户的操作。</p>
+<p>下图展示了如何将两个字节(0xABCD)进行位交换。</p>
+<p><img src="/2021/09/06/Xilinx-Remote-Update/image-20210911165335949.png" alt="image-20210911165335949"></p>
+<p>无论数据的方向如何对于每个数据MSB bit 都是D0 pin:</p>
+<ul>
+<li>数据位交换，D0 是最右边的bit位；</li>
+<li>数据不进行位交换，D0 是最左边的bit位</li>
+</ul>
+<p><strong>何时进行bit swapped</strong></p>
+<p>是否进行位交换取决于用户的应用场景。需要bit交换的应用有Serial, SelectMAP, or BPI PROM files, 和</p>
+<p>ICAPE2的接口。</p>
+<p>sync word bit swap 举例</p>
+<p><img src="/2021/09/06/Xilinx-Remote-Update/image-20210911172830408.png" alt="image-20210911172830408"></p>
+<p><img src="/2021/09/06/Xilinx-Remote-Update/image-20210911172848807.png" alt="image-20210911172848807"></p>
+<h2 id="配置包"><a href="#配置包" class="headerlink" title="配置包"></a>配置包</h2><h3 id="Packet-Types"><a href="#Packet-Types" class="headerlink" title="Packet Types"></a>Packet Types</h3><ul>
+<li>type1 </li>
+<li>Type2</li>
+</ul>
+<h4 id="Type-1-Packet"><a href="#Type-1-Packet" class="headerlink" title="Type 1 Packet"></a>Type 1 Packet</h4><p>Type 1 Packet 用来读写寄存器。</p>
+<p>在Type 1 包类型的包头后跟随的是Type 1 的32bit数据，具体有几个要看在头中的定义。</p>
+<p><strong>Type 1 Packet 头格式</strong></p>
+<p><img src="/2021/09/06/Xilinx-Remote-Update/image-20210911182542201.png" alt="image-20210911182542201"></p>
+<h4 id="Type-2-Packet"><a href="#Type-2-Packet" class="headerlink" title="Type 2 Packet"></a>Type 2 Packet</h4><p>类型 2 数据包必须跟在类型 1 数据包之后，用于写入长块。此处不显示地址是因为它使用以前的类型 1 数据包地址。标题 部分始终是 32 位 的word</p>
+<p><strong>Type 2 Packet 头</strong></p>
+<p><img src="/2021/09/06/Xilinx-Remote-Update/image-20210911182835293.png" alt="image-20210911182835293"></p>
+<h2 id="配置寄存器"><a href="#配置寄存器" class="headerlink" title="配置寄存器"></a>配置寄存器</h2><p>关于配置寄存器的细节请参考UG470 Configuration Refisters 部分。</p>
+<h2 id="重配置与多引导启动"><a href="#重配置与多引导启动" class="headerlink" title="重配置与多引导启动"></a>重配置与多引导启动</h2><p>重配置与多引导启动为FPGA的远程更新提供了条件，回退特性为远程更新提供了一个安全保障。</p>
+<h3 id="回退与多引导启动"><a href="#回退与多引导启动" class="headerlink" title="回退与多引导启动"></a>回退与多引导启动</h3><h4 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h4><p>7 系列 FPGA 的 MultiBoot 和回退功能支持现场更新系统。bitstream镜像可以在现场动态升级。MulitBoot 可以使FPGA在运行中进行多个镜像切换。当多引导启动配置的过程中如果检测到错误，会触发FPGA回退功能，重新加载一个golden design。</p>
+<p><strong>触发fallback FPGA 会做什么？？</strong></p>
+<p>当回退发生时，在内部会产生一个脉冲复位整个配置逻辑，除了MulitBoot逻辑，warm boot start address (WBSTAR), and the boot status (BOOTSTS) registers不会被复位。这个复位脉冲拉低INIT_B和DONE,清除配置存储器，并且重新从地址0开始配置FPGA。在复位后，FPGA会忽略WBSTAR的起始地址。</p>
+<h5 id="触发回退的情况"><a href="#触发回退的情况" class="headerlink" title="触发回退的情况"></a>触发回退的情况</h5><p>在配置期间下面的错误会触发回退功能：</p>
+<ul>
+<li>一个IDCODE错误</li>
+<li>一个CRC错误</li>
+<li>一个Watchdog 时间超时错误</li>
+<li>一个BPI 地址 wraparound 错误</li>
+</ul>
+<h4 id="Golden-Image-Initial-System-Setup"><a href="#Golden-Image-Initial-System-Setup" class="headerlink" title="Golden Image Initial System Setup"></a>Golden Image Initial System Setup</h4><p>下图展示了golden 镜像启动的初始化</p>
+<p><img src="/2021/09/06/Xilinx-Remote-Update/image-20210912051049852.png" alt="image-20210912051049852"></p>
+<h4 id="Initial-MultiBoot-Image-System-Setup"><a href="#Initial-MultiBoot-Image-System-Setup" class="headerlink" title="Initial MultiBoot Image System Setup"></a>Initial MultiBoot Image System Setup</h4><p>多重启动镜像初始化流程图</p>
+<p><img src="/2021/09/06/Xilinx-Remote-Update/image-20210912051528269.png" alt="image-20210912051528269"></p>
+<h4 id="MultiBoot-和-Fallback-的过程详细信息"><a href="#MultiBoot-和-Fallback-的过程详细信息" class="headerlink" title="MultiBoot 和 Fallback 的过程详细信息"></a>MultiBoot 和 Fallback 的过程详细信息</h4><h5 id="IPROG"><a href="#IPROG" class="headerlink" title="IPROG"></a>IPROG</h5><p>Internal PROGRAM(IPROG)命令的功能是PROGRAM_B 引脚脉冲的一个子集，功能的不同之处是在触发回退时，IPROG命令不会擦除 WBSTAR, TIMER, BSPI, and BOOTSTS registers。IPROG 命令触发初始化， INIT 和 DONE 都变低 当发出 IPROG 命令并随后尝试去配置。</p>
+<p>命令有两种途径</p>
+<ol>
+<li>IPROG命令通过在用户逻辑中嵌入ICAPE2原语。</li>
+<li>将IPROG命令嵌入到比特流中。</li>
+</ol>
+<h5 id="WBSTAR-Register"><a href="#WBSTAR-Register" class="headerlink" title="WBSTAR Register"></a>WBSTAR Register</h5><p>WBSTAR (Warm Boot Start Address)寄存器存放IPROG命令用来配置的地址。这个寄存器的设置可以来自比特流，也可以通过ICAPE2进行设置。如果这个寄存器在比特流中没有设置，默认的值是0。所以从从gloden 比特跳转到multiboot 镜像，默认的这个mulitboot将会复位WBSTAR为0，</p>
+<h5 id="Watchdog-Timer"><a href="#Watchdog-Timer" class="headerlink" title="Watchdog Timer"></a>Watchdog Timer</h5><p>看门狗有两种模式(配置监控和用户逻辑监控)</p>
+<p>在配置监控模式下，计时器的值在bit 文件中设置，计时器用来监控配置的时间，当IPROG命令触发一个加载命令时，计时器开始工作。</p>
+<p>从开始加载bitstream 计时器开始倒计时，当配置完成时，禁用计时器。如果计时器到达了0，将会触发一个回退设置。</p>
+<p><strong>定时器的运行频率：</strong></p>
+<p>看门狗使用专用内部时钟 CFGMCLK 的分频版本，它具有 标称频率为 65 MHz。时钟被256分频，这样看门狗时钟 周期约为 4,000 ns。鉴于看门狗计数器是 30 位宽，最大可能的看门狗值约为 4,230 秒。时间值可以通过比特流设置 选项。</p>
+<h5 id="RS-Pins"><a href="#RS-Pins" class="headerlink" title="RS Pins"></a>RS Pins</h5><p>详细信息请参考UG470</p>
+<h3 id="IPROG-Reconfiguration"><a href="#IPROG-Reconfiguration" class="headerlink" title="IPROG Reconfiguration"></a>IPROG Reconfiguration</h3><p>Internal PROGRAM_B pin 与IPROG命令有相同的效果，除了IPROG命令不会复位专用重配置逻辑。</p>
+<p>IPROG命令有两种途径发送，一个是使用ICAPE2另一个是使用bitstream。注意ICAPE2原语接口的输入总线需要进行bit swapped。</p>
+<h4 id="使用ICAPE2的IPROG"><a href="#使用ICAPE2的IPROG" class="headerlink" title="使用ICAPE2的IPROG"></a>使用ICAPE2的IPROG</h4><p><strong>使用ICAPE2原语干什么？？</strong></p>
+<p>使用ICAPPE2原语主要完成两件事：</p>
+<ol>
+<li>发送Sync word</li>
+<li>通过ICAPE2设置WBSTAR寄存器的值，WBSTAR寄存器存放的是接下来要配置的bitstream在flash中的地址。</li>
+<li>发送IPROG命令，开始配置WBSTAR寄存器中指定地址的bitstream。</li>
+</ol>
+<p>表 7-1 显示了使用 ICAPE2 发送 IPROG 命令的示例比特流</p>
+<p><img src="/2021/09/06/Xilinx-Remote-Update/image-20210912065459274.png" alt="image-20210912065459274"></p>
+<p><img src="/2021/09/06/Xilinx-Remote-Update/image-20210912065948490.png" alt="image-20210912065948490"></p>
+<p><strong>注意：</strong></p>
+<p>注意上面黄色的标记之前的重配置不成功可能是 在WBSTAR地址之前没有填充256个虚假的填充字节。</p>
+<p>在除 SPI 模式之外的所有配置模式下，RS[1:0] 由 WBSTAR 控制。这 START_ADDR 字段仅对 BPI 和 SPI 模式有意义</p>
+<p><img src="/2021/09/06/Xilinx-Remote-Update/image-20210912070325000.png" alt="image-20210912070325000"></p>
+<p>与图7-3相关的笔记：</p>
+<ol>
+<li>除 CCLK 引脚外，所有 BPI 引脚都是多功能 I/O。配置完成后 完成（DONE 引脚变为高电平），这些引脚成为用户 I/O 并且可以被控制 通过用户逻辑访问 BPI 闪存以进行用户数据存储和编程</li>
+<li>在本例中，RS[1:0] 设置为 2’b11。在 IPROG 重配置期间，RS[1:0] 引脚覆盖外部上拉和下拉电阻。用户可以指定任何 WBSTAR 寄存器中的 RS[1:0] 值。</li>
+</ol>
+<h4 id="嵌入在Bitdtream-的IPROG"><a href="#嵌入在Bitdtream-的IPROG" class="headerlink" title="嵌入在Bitdtream 的IPROG"></a>嵌入在Bitdtream 的IPROG</h4><p>WBSTAR和IPROG 命令可以嵌入在bitstream 中，举个简单的例子说明一下，在存储在0地址的golden image 镜像中嵌入这两个命令，当配置完golden iamge  时会开始重新执行嵌入的这两个命令，使得跳转到update 镜像。如果配置中出现错误，触发回退。回退的详细细节请关注前面的内容。</p>
+<p><img src="/2021/09/06/Xilinx-Remote-Update/image-20210912161249151.png" alt="image-20210912161249151"></p>
+<h3 id="回退和-IPROG-重新配置的状态寄存器"><a href="#回退和-IPROG-重新配置的状态寄存器" class="headerlink" title="回退和 IPROG 重新配置的状态寄存器"></a>回退和 IPROG 重新配置的状态寄存器</h3><p>7系列设备包含一个存储配置历史的 BOOTSTS。其中Status_0存储最近一次的配置状态，Status_1由Status_0转移而来，Status_1存储的是上一次的配置状态。</p>
+<p><img src="/2021/09/06/Xilinx-Remote-Update/image-20210912161854185.png" alt="image-20210912161854185"></p>
+<p><img src="/2021/09/06/Xilinx-Remote-Update/image-20210912161911978.png" alt="image-20210912161911978"></p>
+<p><img src="/2021/09/06/Xilinx-Remote-Update/image-20210912161937666.png" alt="image-20210912161937666"></p>
+<p><strong>笔记：</strong> </p>
+<ol>
+<li>Status_1 显示已尝试 IPROG，并且检测到该比特流的 CRC_ERROR。 </li>
+<li>Status_0 显示已成功加载回退比特流。在这种情况下还设置了 IPROG 位，因为回退比特流 包含一个 IPROG 命令。虽然在回退过程中忽略了 IPROG 命令，但状态仍然记录了这一事件。 表 7-5：嵌入在第一个比特流中的 IPROG，第二个比特流 CRC 错误，成功回退 保留 WRAP_ERROR CRC_ERROR ID_ERROR WTO_ERROR IPROG FALLBACK VALID发送反馈</li>
+</ol>
+<h3 id="看门狗"><a href="#看门狗" class="headerlink" title="看门狗"></a>看门狗</h3><ul>
+<li><p>Configuration Monitor Mode</p>
+</li>
+<li><p>User Monitor Mode</p>
+<p>具体的请参考UG470 第7章看门狗部分。</p>
+</li>
+</ul>
+<h2 id="多FPGA配置"><a href="#多FPGA配置" class="headerlink" title="多FPGA配置"></a>多FPGA配置</h2><p>请参考UG470 第9章</p>
+<h1 id="远程更新"><a href="#远程更新" class="headerlink" title="远程更新"></a>远程更新</h1><h1 id="Critical-Switch-Word"><a href="#Critical-Switch-Word" class="headerlink" title="Critical Switch Word"></a>Critical Switch Word</h1><ul>
+<li>bus width auto detection word</li>
+<li>Sync word</li>
+<li>Packet header word</li>
+<li>Packet command or data word</li>
+</ul>
+<h3 id="BPI-与SPI配置模式下的关键字"><a href="#BPI-与SPI配置模式下的关键字" class="headerlink" title="BPI 与SPI配置模式下的关键字"></a>BPI 与SPI配置模式下的关键字</h3><p><img src="/2021/09/06/Xilinx-Remote-Update/image-20210910010529284.png" alt="image-20210910010529284"></p>
+<h3 id="bus-width-auto-detection-word"><a href="#bus-width-auto-detection-word" class="headerlink" title="bus width auto detection word"></a>bus width auto detection word</h3><ul>
+<li>首先这个关键字在串行配置模式中被忽略。</li>
+<li>在并行配置模式时，这个关键字自动的检测配置总线的宽度，并且这个关键字出现在sync word之前。</li>
+</ul>
+<p>关于bus width auto detection关键字的更多信息请参考UG470的第5章Configuration Details。</p>
+<h4 id="SPI-mode"><a href="#SPI-mode" class="headerlink" title="SPI mode"></a>SPI mode</h4><p>&ensp; &ensp;&ensp;&ensp;在SPI模式下，FPGA不使用总线宽度检测逻辑。</p>
+<p>&ensp; &ensp;&ensp;&ensp;当FPGA从SPI flash 存储器中读取数据时，FPGA的配置逻辑一直处于第一阶段，直到从读取的数据中检测到sync word 0xAA995566。在检测到sync word 之前的数据视为无效数据。</p>
+<h3 id="Sync-word-0XAA995566"><a href="#Sync-word-0XAA995566" class="headerlink" title="Sync word(0XAA995566)"></a>Sync word(0XAA995566)</h3><p>​    使用指定的sync word 实现以32bit为边界的对齐。在FPGA检测到sync word 之前的数据不会被处理。对于并行配置，总线宽度检测关键字必须在sync word 之前被检测。</p>
+<h2 id="NOR-Flash简介"><a href="#NOR-Flash简介" class="headerlink" title="NOR Flash简介"></a>NOR Flash简介</h2><p>NOR flash 由字或字节的线性阵列组成，线性的存储阵列由可以擦除的blocks 或者 sectors组成。sectors 可以由更小的 subsectors 组成。</p>
+<h3 id="重新编程NOR-Flash的过程："><a href="#重新编程NOR-Flash的过程：" class="headerlink" title="重新编程NOR Flash的过程："></a>重新编程NOR Flash的过程：</h3><ol>
+<li>擦除操作：复位所有的选择部分的bits作为1；</li>
+<li>编程操作：改变数据bits,只能从1变成0。</li>
+</ol>
+<h3 id="关于SPI的容量与位宽"><a href="#关于SPI的容量与位宽" class="headerlink" title="关于SPI的容量与位宽"></a>关于SPI的容量与位宽</h3><p>​    7系列FPGA支持大于128Mb容量32bit地址的SPI flash。</p>
+<p>​    当spi flash的容量大于128Mb，并且启用了FPGA的Mulitboot时，必须在所有的配置镜像中设置spi_32bit_addr</p>
+<h2 id="General-Mapping-of-QuickBoot-Components-Within-Flash-Memory"><a href="#General-Mapping-of-QuickBoot-Components-Within-Flash-Memory" class="headerlink" title="General Mapping of QuickBoot Components Within Flash Memory"></a>General Mapping of QuickBoot Components Within Flash Memory</h2><p>Because modification of the flash memory requires an erase operation and because an erase<br>operation affects an entire flash memory segment, the flash memory segment architecture<br>dictates the placement of the QuickBoot components within a flash memory:</p>
+<ol>
+<li><p>The QuickBoot header is placed in this sequence:<br>a. QuickBoot header part 1, the critical switch word, is placed in its own erasable segment.<br>b. QuickBoot header part 2 follows part 1 but in a different flash segment than part 1.</p>
+</li>
+<li><p>The golden bitstream image follows the QuickBoot header in the flash memory array.</p>
+</li>
+<li><p> The update bitstream image is placed in its own erasable segments. The update image does not share any erasable segments with the golden bitstream image.</p>
+</li>
+</ol>
+<p>   The critical switch word is placed within its own erasable segment such that the destruct process, which is an erase operation, affects only the critical switch word. Similarly, the update image is placed in its own set of segments such that the reprogramming process does not affect the golden bitstream image.</p>
+<h3 id="Detailed-Mapping-of-QuickBoot-Components-to-SPI-Flash-Memory"><a href="#Detailed-Mapping-of-QuickBoot-Components-to-SPI-Flash-Memory" class="headerlink" title="Detailed Mapping of QuickBoot Components to SPI Flash Memory"></a>Detailed Mapping of QuickBoot Components to SPI Flash Memory</h3><p>SPI模式快速引导flash映射关系图如下图，在图中第一个子扇区0-0xFFC，是可擦除的，存放关键字（sync word 0xAA995566）的区域，</p>
+<p>黄色区域对应的存储区域是”golden”bitstream 。绿色的区域对应存储区域存放”UPDATE BITSTREAM”。</p>
+<p><img src="/2021/09/06/Xilinx-Remote-Update/image-20210910154920233.png" alt="image-20210910154920233"></p>
+<h2 id="多引导配置FPGA-SPI-mode"><a href="#多引导配置FPGA-SPI-mode" class="headerlink" title="多引导配置FPGA SPI mode"></a>多引导配置FPGA SPI mode</h2><h3 id="多引导基础"><a href="#多引导基础" class="headerlink" title="多引导基础"></a>多引导基础</h3><p>FPGA的多引导启动特性为FPGA的远程更新提供了基础。当FPGA进行配置镜像切换出现错误时，FPGA可以触发一个回退特性，确保一个golden image可以被成功的配置。这种解决方案需要将多个配置镜像存储在同一块配置flash中。</p>
+<ul>
+<li>Fallback or “golden bitstream”</li>
+<li>MultiBoot or  “update bitstream”</li>
+</ul>
+<p>MultiBoot 功能使FPGA可以选择加载一个在flash中指定地址的bitstream。一个内部生成脉冲（IPROG）启动配置逻辑跳转到WBSTAR寄存器中指定地址的update bitstream 。如果在配置中检测到错误，FPGA将会触发回退加载golden bitstream。</p>
+<p><img src="/2021/09/06/Xilinx-Remote-Update/image-20210910183544763.png" alt="image-20210910183544763"></p>
+<h2 id="两种实现MulitBoot的方法："><a href="#两种实现MulitBoot的方法：" class="headerlink" title="两种实现MulitBoot的方法："></a>两种实现MulitBoot的方法：</h2><ol>
+<li>PROG嵌入在bitstream 中：使用 NEXT_CONFIG_ADDR 在bitstream 中启用IPROG 。</li>
+<li>IPORG 使用ICAPE2：使用ICAPE2原语实现对寄存器的读写操作。</li>
+</ol>
+<p>&ensp;&ensp;注意：将IPROG嵌入到bitstream中是一个自动的操作；而是用ICAPE2原语是通过在rtl设计中通过一些事件的触发实现重新引导FPGA的配置。</p>
+<p><img src="/2021/09/06/Xilinx-Remote-Update/image-20210910215054742.png" alt="image-20210910215054742"></p>
+<h2 id="PROG嵌入比特流的Mulitboot实现方式"><a href="#PROG嵌入比特流的Mulitboot实现方式" class="headerlink" title="PROG嵌入比特流的Mulitboot实现方式"></a>PROG嵌入比特流的Mulitboot实现方式</h2><h3 id="golden-bitstream-和-update-bitstream-XDC设置"><a href="#golden-bitstream-和-update-bitstream-XDC设置" class="headerlink" title="golden bitstream 和 update bitstream  XDC设置"></a>golden bitstream 和 update bitstream  XDC设置</h3><p><img src="/2021/09/06/Xilinx-Remote-Update/image-20210910235559430.png" alt="image-20210910235559430"></p>
+<p><strong>注意：</strong> 关于更多的BITSTREAM 的属性设置请阅读ug908</p>
+<h4 id="Golden-design-XDC-设置"><a href="#Golden-design-XDC-设置" class="headerlink" title="Golden design XDC 设置"></a>Golden design XDC 设置</h4><p>打开golden design 的.XDC文件，添加以下设置：</p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">set_property BITSTREAM.CONFIG.CONFIGFALLBACK ENABLE [current_design]</span><br><span class="line">set_property BITSTREAM.CONFIG.NEXT_CONFIG_ADDR <span class="number">0x0400000</span> [current_design]</span><br><span class="line">set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]</span><br><span class="line">set_property BITSTREAM.CONFIG.TIMER_CFG &lt;Timer Value&gt; [current_design]</span><br><span class="line">set_property BITSTREAM.CONFIG.SPI_BUSWIDTH <span class="number">1</span> [current_design]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>Note:</strong> BITSTREAM.CONFIG.NEXT_CONFIG_ADDR 0x0400000 这一条约束指的的是下一个镜像的地址，需要根据自己的设计进行做出适当的修改。</p>
+<p><strong>Note:</strong> 默认的SPI_BUSWIDTH 是X1的，在实际的工程设计中需要根据实际的硬件设计做出调整。</p>
+<p><strong>Note:</strong> 建议在实际的设计中添加看门狗，如果NEXT_CONFIG_ADDR 地址之后没有找到sync word (有效的Update bitstream），那么FPGA将扫描整个flash需要花费超长时间,关于超时计时器的计数值的计算请参考UG470。</p>
+<h4 id="Update-design-XDC-设置"><a href="#Update-design-XDC-设置" class="headerlink" title="Update design XDC 设置"></a>Update design XDC 设置</h4><p>打开update design 的.XDC文件，添加以下设置：</p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">set_property BITSTREAM.CONFIG.CONFIGFALLBACK ENABLE [current_design]</span><br><span class="line">set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]</span><br><span class="line">set_property BITSTREAM.CONFIG.SPI_BUSWIDTH <span class="number">1</span> [current_design]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>Note:</strong> 默认的SPI_BUSWIDTH 是X1的，在实际的工程设计中需要根据实际的硬件设计做出调整。</p>
+<p><strong>特别说明：关于 SPI_32BIT_ADDR 的注意点</strong> </p>
+<p>如果所使用的spi flash 的容量&gt;=256Mb 可以在xdc中set_property BITSTREAM.CONFIG.SPI_32BIT_ADDR YES [current_design] 来启用32bit 的地址，但是注意golden 与 update 两个镜像的SPI_32BIT_ADDR 需要保持一至。</p>
+<h4 id="约束解释"><a href="#约束解释" class="headerlink" title="约束解释"></a>约束解释</h4><figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CONFIGFALLBACK ENABLE #打开回退设置</span><br><span class="line">NEXT_CONFIG_ADDR <span class="number">0x0400000</span> #Update 镜像在flash中的地址是<span class="number">0x0400000</span></span><br><span class="line">COMPRESS TRUE #使能烧录文件的压缩设置，可以减少烧录文件的大小，缩短固化的时间，配置的时间</span><br><span class="line">SPI_BUSWIDTH <span class="number">1</span> #设置配置FPGA时的接口宽度 x1 x2 x4</span><br></pre></td></tr></table></figure>
+
+<h4 id="使用tcl指令生成SPI-FLASH-编程文件"><a href="#使用tcl指令生成SPI-FLASH-编程文件" class="headerlink" title="使用tcl指令生成SPI FLASH 编程文件"></a>使用tcl指令生成SPI FLASH 编程文件</h4><p>这里使用tcl指令生成的是.mcs文件，也可以生成.bin 文件</p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">write_cfgmem -<span class="keyword">format</span> mcs -interface SPIX1 -size <span class="number">16</span> -loadbit <span class="string">&quot;up 0 &lt;path&gt;/golden.bit up 0x0400000 &lt;path&gt;/update.bit&quot;</span>  &lt;path&gt;/<span class="keyword">filename</span>.mcs</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>Note:</strong>  Address value 0x0400000 is an example, as used in the reference design. The Addr A1 value<br>set in the golden image (start address of update image) should be used (see Table 1).</p>
+<h4 id="Debug"><a href="#Debug" class="headerlink" title="Debug"></a>Debug</h4><p>我们可以通过检查BOOT_STATUS 寄存器的INTERNAL_PROG的值，可以验证MulitBoot是否成功跳转到update bitstream 。关于BOOT_STATUS的更多细节请参考UG470。</p>
+<h5 id="成功跳转："><a href="#成功跳转：" class="headerlink" title="成功跳转："></a>成功跳转：</h5><p><img src="/2021/09/06/Xilinx-Remote-Update/image-20210911003430889.png" alt="image-20210911003430889"> </p>
+<h5 id="由CRC错误触发的回退"><a href="#由CRC错误触发的回退" class="headerlink" title="由CRC错误触发的回退"></a>由CRC错误触发的回退</h5><p><img src="/2021/09/06/Xilinx-Remote-Update/image-20210911003722775.png" alt="image-20210911003722775"></p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ol>
+<li>使用warm boot start address 跳转的存储区域还有一个sync,这怎么处理</li>
+<li>在测试mulitboot时可以仿照UG470 的第5章bitstream composition 中的325T的比特流来编写ICAPE2</li>
+</ol>
+<h2 id="参考文档："><a href="#参考文档：" class="headerlink" title="参考文档："></a>参考文档：</h2><ol>
+<li>ug470_7Series_Config.pdf</li>
+<li>xapp1247</li>
+<li>xapp1081</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Xilinx/" rel="tag"># Xilinx</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/09/13/Archlinu-install-note/" rel="next" title="Archlinu-install-note">
+                  Archlinu-install-note <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zsz</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

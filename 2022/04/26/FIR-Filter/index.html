@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","version":"8.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="FIR 滤波器设计参考资料 数字信号处理及其matlab实现 数字滤波器的MATLAB与FPGA实现.pdf Digital Signal Processing Using MATLAB®Third Edition Vinay K. Ingle John G. Proakis  为什么使用FIR滤波器 FIR滤波器可以设计成任意幅频特性的滤波器 FIR滤波器可以设计成严格线性相位的滤波器。 硬件实">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FIR_Filter">
+<meta property="og:url" content="http://example.com/2022/04/26/FIR-Filter/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="FIR 滤波器设计参考资料 数字信号处理及其matlab实现 数字滤波器的MATLAB与FPGA实现.pdf Digital Signal Processing Using MATLAB®Third Edition Vinay K. Ingle John G. Proakis  为什么使用FIR滤波器 FIR滤波器可以设计成任意幅频特性的滤波器 FIR滤波器可以设计成严格线性相位的滤波器。 硬件实">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/04/26/FIR-Filter/image-20220426105852642.png">
+<meta property="og:image" content="http://example.com/2022/04/26/FIR-Filter/image-20220426113828421.png">
+<meta property="og:image" content="http://example.com/2022/04/26/FIR-Filter/image-20220426165316709.png">
+<meta property="og:image" content="http://example.com/2022/04/26/FIR-Filter/filter_dim_1_zh_CN.png">
+<meta property="og:image" content="http://example.com/2022/04/26/FIR-Filter/filter_dim_2_zh_CN.png">
+<meta property="og:image" content="http://example.com/2022/04/26/FIR-Filter/firls_plot.png">
+<meta property="og:image" content="http://example.com/2022/04/26/FIR-Filter/image-20220426231955639.png">
+<meta property="og:image" content="http://example.com/2022/04/26/FIR-Filter/image-20220426231914167.png">
+<meta property="article:published_time" content="2022-04-26T01:41:44.000Z">
+<meta property="article:modified_time" content="2022-04-26T15:20:00.054Z">
+<meta property="article:author" content="zsz">
+<meta property="article:tag" content="FIR">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/04/26/FIR-Filter/image-20220426105852642.png">
+
+
+<link rel="canonical" href="http://example.com/2022/04/26/FIR-Filter/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/04/26/FIR-Filter/","path":"2022/04/26/FIR-Filter/","title":"FIR_Filter"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>FIR_Filter | Hexo</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Hexo</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">遇见美好的每天</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">19</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">8</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">21</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#FIR-%E6%BB%A4%E6%B3%A2%E5%99%A8%E8%AE%BE%E8%AE%A1"><span class="nav-number">1.</span> <span class="nav-text">FIR 滤波器设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">1.1.</span> <span class="nav-text">参考资料</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8FIR%E6%BB%A4%E6%B3%A2%E5%99%A8"><span class="nav-number">1.2.</span> <span class="nav-text">为什么使用FIR滤波器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FIR-%E6%BB%A4%E6%B3%A2%E5%99%A8%E5%9F%BA%E6%9C%AC%E7%90%86%E8%AE%BA"><span class="nav-number">1.3.</span> <span class="nav-text">FIR 滤波器基本理论</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.1.</span> <span class="nav-text">系统函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FIR%E6%BB%A4%E6%B3%A2%E5%99%A8%E7%9A%84%E7%BB%93%E6%9E%84"><span class="nav-number">1.3.2.</span> <span class="nav-text">FIR滤波器的结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BB%A4%E6%B3%A2%E5%99%A8%E6%9C%AF%E8%AF%AD"><span class="nav-number">1.3.3.</span> <span class="nav-text">滤波器术语</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FIR-%E6%BB%A4%E6%B3%A2%E5%99%A8%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%B3%95"><span class="nav-number">1.4.</span> <span class="nav-text">FIR 滤波器设计方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AA%97%E5%87%BD%E6%95%B0"><span class="nav-number">1.4.1.</span> <span class="nav-text">窗函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%91%E7%8E%87%E9%87%87%E6%A0%B7"><span class="nav-number">1.4.2.</span> <span class="nav-text">频率采样</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E4%BC%98%E7%AD%89%E6%B3%A2%E7%BA%B9%E8%AE%BE%E8%AE%A1"><span class="nav-number">1.4.3.</span> <span class="nav-text">最优等波纹设计</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MATLAB-%E8%AE%BE%E8%AE%A1FIR%E6%BB%A4%E6%B3%A2%E5%99%A8"><span class="nav-number">1.5.</span> <span class="nav-text">MATLAB 设计FIR滤波器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84%E5%87%BD%E6%95%B0"><span class="nav-number">1.5.1.</span> <span class="nav-text">常见的函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E8%AE%BE%E8%AE%A1%E6%B3%95"><span class="nav-number">1.5.2.</span> <span class="nav-text">函数设计法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#fir1"><span class="nav-number">1.5.2.1.</span> <span class="nav-text">fir1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#fir2"><span class="nav-number">1.5.2.2.</span> <span class="nav-text">fir2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#filter"><span class="nav-number">1.5.2.3.</span> <span class="nav-text">filter</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#firpm"><span class="nav-number">1.5.2.4.</span> <span class="nav-text">firpm</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#firpmord"><span class="nav-number">1.5.2.5.</span> <span class="nav-text">firpmord</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#kaiserord"><span class="nav-number">1.5.2.6.</span> <span class="nav-text">kaiserord</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#filterDesigner-%E5%B7%A5%E5%85%B7%E7%AE%B1%E8%AE%BE%E8%AE%A1%E6%B3%95"><span class="nav-number">1.5.3.</span> <span class="nav-text">filterDesigner 工具箱设计法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#question"><span class="nav-number">1.6.</span> <span class="nav-text">question</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8FPGA%E7%A1%AC%E4%BB%B6%E5%AE%9E%E7%8E%B0FIR%E6%BB%A4%E6%B3%A2%E5%99%A8"><span class="nav-number">1.7.</span> <span class="nav-text">使用FPGA硬件实现FIR滤波器</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zsz</p>
+  <div class="site-description" itemprop="description">不负光阴韶华</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/26/FIR-Filter/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zsz">
+      <meta itemprop="description" content="不负光阴韶华">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          FIR_Filter
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-04-26 09:41:44 / 修改时间：23:20:00" itemprop="dateCreated datePublished" datetime="2022-04-26T09:41:44+08:00">2022-04-26</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="FIR-滤波器设计"><a href="#FIR-滤波器设计" class="headerlink" title="FIR 滤波器设计"></a>FIR 滤波器设计</h1><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li>数字信号处理及其matlab实现</li>
+<li>数字滤波器的MATLAB与FPGA实现.pdf</li>
+<li>Digital Signal Processing Using MATLAB®Third Edition Vinay K. Ingle John G. Proakis</li>
+</ol>
+<h2 id="为什么使用FIR滤波器"><a href="#为什么使用FIR滤波器" class="headerlink" title="为什么使用FIR滤波器"></a>为什么使用FIR滤波器</h2><ol>
+<li>FIR滤波器可以设计成任意幅频特性的滤波器</li>
+<li>FIR滤波器可以设计成<strong>严格线性相位</strong>的滤波器。</li>
+<li>硬件实现简单，使用MATLAB设计方便</li>
+</ol>
+<h2 id="FIR-滤波器基本理论"><a href="#FIR-滤波器基本理论" class="headerlink" title="FIR 滤波器基本理论"></a>FIR 滤波器基本理论</h2><h3 id="系统函数"><a href="#系统函数" class="headerlink" title="系统函数"></a>系统函数</h3><p><strong>系统函数：</strong>有限冲激响应滤波器(FIR)的系统函数<br>$$<br>H(z)=\frac{B(z)}{A(z)}<br>$$<br>一般的当A(z) =1 时为FIR滤波器。</p>
+<p>Z变换表示系统函数：<br>$$<br>H(z) = b_0 + b_1z^{-1}+\cdots +b_{M-1}z^{1-M}=\sum_{n=0}^{M-1}b_nz^{-n}<br>$$<br>因此它的冲激响应h(n)是<br>$$<br>h(n)=<br>\begin{cases}<br>b_n, &amp; 0\leq n \leq M-1 \<br>0,     &amp; else<br>\end{cases}<br>$$<br><strong>差分方程表达式：</strong><br>$$<br>y(n) = b_0x(n)+b_1x(n-1)+\cdots+b_{M-1}x(n-M+1)<br>$$</p>
+<h3 id="FIR滤波器的结构"><a href="#FIR滤波器的结构" class="headerlink" title="FIR滤波器的结构"></a>FIR滤波器的结构</h3><p><strong>直接型</strong></p>
+<p><img src="/2022/04/26/FIR-Filter/image-20220426105852642.png" alt="image-20220426105849962"></p>
+<p><strong>转置型</strong>1、交换输入输出；2、颠倒信号流向；使用差分放大器替代加法器</p>
+<p>这其中$b_0,b_1\dots,b_{n-1}$是我们平常所说的抽头系数，可以使用matlab设计得到。</p>
+<p><strong>线性相位</strong></p>
+<p>当FIR滤波器的单位取样响应是偶对称或者是及对称时，系统均具有线性相位的特性。</p>
+<p><img src="/2022/04/26/FIR-Filter/image-20220426113828421.png" alt="image-20220426113828421"></p>
+<p>上图中</p>
+<p>（a）偶数的偶对称 （b）奇数的偶对称</p>
+<p>（c）偶数的奇对称 （d）奇数的奇对称</p>
+<p>注：在有些书中称“奇对称”为“反对称”</p>
+<h3 id="滤波器术语"><a href="#滤波器术语" class="headerlink" title="滤波器术语"></a>滤波器术语</h3><p><img src="/2022/04/26/FIR-Filter/image-20220426165316709.png" alt="image-20220426165316709"></p>
+<h2 id="FIR-滤波器设计方法"><a href="#FIR-滤波器设计方法" class="headerlink" title="FIR 滤波器设计方法"></a>FIR 滤波器设计方法</h2><h3 id="窗函数"><a href="#窗函数" class="headerlink" title="窗函数"></a>窗函数</h3><p>窗函数设计的基本思想为，首先选择一个适当的理想选频滤波器(它总是具有一个非因果，无限持续时间脉冲响应)，然后截取（或加窗）它的脉冲响应得到线性相位和因果FIR滤波器。因此这种方法的<strong>重点</strong>是选择一个合适的<strong>窗函数</strong>和<strong>理想滤波器</strong>。我们用 $H_d(e^{jw})$ 表示理想滤波器的选频滤波器，它在通带上具有单位增益和线性相位，在阻带上具有零响应。一个带宽 $w_c&lt;\pi$ 的低通滤波器定义由下式给定:<br>$$<br> H_d(e^{-jw}) = \begin{cases}</p>
+<p>​    1*e^{-jw}, &amp; |w|\leq w_c \</p>
+<p>​    0,  &amp; w_c &lt; |w|\leq \pi</p>
+<p>  \end{cases}<br>$$</p>
+<p>其中$w_c$也叫截止频率，$\alpha$为采样延迟。<br>$$<br>\begin{equation}</p>
+<p>  \begin{split}</p>
+<p>​    h_d &amp;= F^{-1}[H_d(e^{jw})] = \frac{1}{2\pi}\int_{-\pi}^{\pi}{H_d(e^{jw})e^{jwn}dw}\</p>
+<p>​    &amp;=\frac{1}{2\pi}\int_{-w_c}^{w_c}{1e^{-j\alpha w}e^{jwn}dw}\ </p>
+<p>​    &amp;=\frac{sin[w_c(n-\alpha)]}{\pi (n-\alpha)}</p>
+<p>  \end{split}</p>
+<p>\end{equation}<br>$$<br>注意$h_d(n)$关于$\alpha$对称，这一点对线性相位滤波器是有用的。</p>
+<p>为了从$h_d(n)$得到一个FIR滤波器，必须同时在两边截取$h_d(n)$。而要得到一个因果的线性相位滤波器，它的他的$h(n)$长度必须为M，必须有：<br>$$<br>h(n) = \begin{cases}<br>h_d(n) &amp;,    &amp; 0\leq n \leq M-1 \<br>0 &amp;,     &amp; else<br>\end{cases}<br> &amp;  \alpha=\frac{M-1}{2}<br>$$<br>“加窗”一般的讲，$h(n)$ 可以看作是$h_d(n)$与窗函数$w(n)$的乘积：<br>$$<br>h(n) = h_d(n)w(n)<br>$$<br>根据$w(n)$的不同定义，可以得到不同的窗结构。</p>
+<p><font color="red">注意：</font> 对实际FIR滤波器幅频特性有影响的只是窗函数的幅频特性。</p>
+<h3 id="频率采样"><a href="#频率采样" class="headerlink" title="频率采样"></a>频率采样</h3><p>待补充 $\cdots$</p>
+<h3 id="最优等波纹设计"><a href="#最优等波纹设计" class="headerlink" title="最优等波纹设计"></a>最优等波纹设计</h3><p>在上面探讨的窗函数和频率采样技术比较容易实现，但是他们存在一些不足：</p>
+<ol>
+<li>在设计过程中，不能精确的指定通带和阻带频率$w_s,w_p$;</li>
+<li>不管是在窗函数设计法中使用的$\delta_1=\delta_2$还是在频率采样法中只优化$\delta_2$,均不能同时确定波动系数，$\delta_1$和 $\delta_2$。</li>
+<li>误差逼近，也就是理想响应和实际响应的差，在带区间上不是均匀分布的。靠近带边缘处误差较高，而远离边缘处较小。</li>
+</ol>
+<p>那么有没有一种方法可以克服上面个的三个问题呢，那就是这一小节中提到的最优等波纹设计法。</p>
+<p>对于线性相位FIR滤波器，有可能导出一组条件，使得在最小化最大逼近误差（有时也叫最大最小化或切比雪夫误差）的意义上说，设计是最优的。具有这种性质的滤波器叫做等波动滤波器，因为它在通带和阻带上的误差是均匀分布的，其阶次可以比较低。</p>
+<h2 id="MATLAB-设计FIR滤波器"><a href="#MATLAB-设计FIR滤波器" class="headerlink" title="MATLAB 设计FIR滤波器"></a>MATLAB 设计FIR滤波器</h2><h3 id="常见的函数"><a href="#常见的函数" class="headerlink" title="常见的函数"></a>常见的函数</h3><p>fir1,fir2,filter,firpm,firpmord,kaiserord,freqz,remez,remezord等等。</p>
+<p><font color="red">注意</font>:在新版的matlab中remez,remezord 函数被firpm,firpmord函数取代了。</p>
+<h3 id="函数设计法"><a href="#函数设计法" class="headerlink" title="函数设计法"></a>函数设计法</h3><h4 id="fir1"><a href="#fir1" class="headerlink" title="fir1"></a>fir1</h4><p>可以用来设计低通、带通、高通、带阻等多种类型的具有严格线性相位特性的FIR滤波器。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">b = fir1(n,Wn)</span><br><span class="line">b = fir1(n,Wn,ftype)</span><br><span class="line">b = fir1(___,window)</span><br><span class="line">b = fir1(___,scaleopt)</span><br><span class="line"><span class="comment">%描述:</span></span><br><span class="line"><span class="comment">% b :返回的FIR滤波器单位脉冲响应，脉冲响应为偶对称，长度为n+1;</span></span><br><span class="line"><span class="comment">% n :滤波器的阶数，需要注意的是设计出的滤波器长度为n+1</span></span><br><span class="line"><span class="comment">% wn:滤波器截至频率；需要注意的是，wn的取值范围为0&lt;wn&lt;1,1对应信号采样频率的1/2;如果wn为单个数值，且ftype为low,表示设计的是截至频率是wn的低通滤波器，if ftype为high,表示设计的是截至频率是wn的高通滤波器；如果wn是两个数组组成的向量[wn1 wn2] ,ftype为stop，表示设计带阻滤波器，ftype为bandpass，表示设计带通滤波器，如果由多个数组组成的向量，则根据ftype的值设计多个带通或者带阻范围的滤波器，ftype=DC-1表示第一个频带是带通，ftype为DC-0表示第一个频带是带阻</span></span><br><span class="line"><span class="comment">% windows : 指的是使用的窗函数向量，默认为海明窗。</span></span><br><span class="line"><span class="comment">%noscale:指的是是否归一化滤波器的幅度。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">%% 实例1：4.1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">%%实列二比较各个窗函数4.2</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="fir2"><a href="#fir2" class="headerlink" title="fir2"></a>fir2</h4><p><strong>fir2：</strong>可以完成任意响应滤波器;实质是基于频率抽样的滤波器设计</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">b = fir2(n,f,m)</span><br><span class="line">b = fir2(n,f,m,npt,lap)</span><br><span class="line">b = fir2(___,window)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p>**b :**返回的FIR滤波器单位脉冲响应，脉冲响应为偶对称，长度为n+1;</p>
+<p>**n :**滤波器的阶数，需要注意的是设计出的滤波器长度为n+1</p>
+<p><strong>f与m:</strong></p>
+<ul>
+<li><p>f 是从 0 到 1 范围内的频点向量，其中 1 对应于奈奎斯特频率。 f 的第一个点必须为 0，最后一个点必须为 1。 f 必须按升序排序。 重复频率点是允许的，并被视为频率响应中的阶跃。      </p>
+</li>
+<li><p>m 是一个向量，包含在 f 中指定的每个点处的所需幅度响应。</p>
+</li>
+</ul>
+<p><strong>windows</strong> : 指的是使用的窗函数向量，默认为海明窗。</p>
+<p><strong>npt</strong> - 网格点数 512（默认）</p>
+<p>正整数标量  ，用于指定在对幅度响应进行插值时的插值点个数。 npt 必须大于过滤器阶数的二分之一：npt &gt; n/2。</p>
+<p><strong>lap</strong> - 重复频率点周围的区域长度 25（默认）</p>
+<p>​    正整数标量  用于指定幅度响应进行插值时，对于不连续点转变成连续时的点数。 </p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%示例4.3</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="filter"><a href="#filter" class="headerlink" title="filter"></a>filter</h4><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">y = filter(b,a,x)</span><br><span class="line">y = filter(b,a,x,zi)</span><br><span class="line">y = filter(b,a,x,zi,dim)</span><br><span class="line">[y,zf] = filter(___)</span><br><span class="line"><span class="comment">%y = filter(b,a,x) 使用由分子和分母系数 b 和 a 定义的有理传递函数 对输入数据 x 进行滤波。</span></span><br><span class="line"><span class="comment">%如果 a(1) 不等于 1，则 filter 按 a(1) 对滤波器系数进行归一化。因此，a(1) 必须是非零值。</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>y：滤波后的数据，以向量、矩阵或大小与输入数组 <code>x</code> 相同的多维数组的形式返回。</p>
+<p>如果 <code>x</code> 的类型为 <code>single</code>，则 <code>filter</code> 本身以单精度进行计算，<code>y</code> 的类型也是 <code>single</code>。否则，<code>y</code> 以 <code>double</code> 类型返回。</p>
+</li>
+<li><p>b: <code>b</code> - 有理传递函数的分子系数  向量有理传递函数的分子系数，指定为向量。</p>
+</li>
+<li><p>a:<code>a</code> - 有理传递函数的分母系数  向量</p>
+</li>
+<li><p>x:<code>x</code> - 输入数据待滤波的信号数据</p>
+</li>
+<li><p>zi:<code>zi</code> - 滤波器延迟的初始条件</p>
+</li>
+<li><p>dim： 沿其运算的维度，指定为正整数标量。如果未指定值，则默认值是大小不等于 1 的第一个数组维度。</p>
+<p>以一个二维输入数组 <code>x</code> 为例。</p>
+<ul>
+<li><p>如果 <code>dim = 1</code>，则 <code>filter(b,a,x,zi,1)</code> 沿着 <code>x</code> 的行进行计算并返回应用于每列的滤波器。</p>
+<p><img src="/2022/04/26/FIR-Filter/filter_dim_1_zh_CN.png" alt="img"></p>
+</li>
+<li><p>如果 <code>dim = 2</code>，则 <code>filter(b,a,x,zi,2)</code> 沿 <code>x</code> 的列进行计算，并返回应用于每一行的滤波器。</p>
+<p><img src="/2022/04/26/FIR-Filter/filter_dim_2_zh_CN.png" alt="img"></p>
+</li>
+</ul>
+<p>如果 <code>dim</code> 大于 <code>ndims(x)</code>，则 <code>filter</code> 返回 <code>x</code>。</p>
+</li>
+</ul>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%示例</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="firpm"><a href="#firpm" class="headerlink" title="firpm"></a>firpm</h4><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">b = firpm(n,f,a)</span><br><span class="line">b = firpm(n,f,a,w)</span><br><span class="line">b = firpm(n,f,a,<span class="string">&#x27;ftype&#x27;</span>)</span><br><span class="line">b = firpm(n,f,a,w,<span class="string">&#x27;ftype&#x27;</span>)</span><br><span class="line">b = firpm(...,&#123;lgrid&#125;)</span><br><span class="line">[b,err] = firpm(...)</span><br></pre></td></tr></table></figure>
+
+<p><code>firpm</code> designs a linear-phase FIR filter using the Parks-McClellan algorithm [<a target="_blank" rel="noopener" href="https://ww2.mathworks.cn/help/releases/R2018a/signal/ref/firpm.html#bqih7pt-1">1]</a>. The Parks-McClellan algorithm uses the Remez exchange algorithm and Chebyshev approximation theory to design filters with an optimal fit between the desired and actual frequency responses. The filters are optimal in the sense that the maximum error between the desired frequency response and the actual frequency response is minimized. Filters designed this way exhibit an equiripple behavior in their frequency responses and are sometimes called <em>equiripple</em> filters. <code>firpm</code> exhibits discontinuities at the head and tail of its impulse response due to this equiripple nature.</p>
+<p><code>b = firpm(n,f,a)</code> returns row vector <code>b</code> containing the <code>n+1</code> coefficients of the order <code>n</code> FIR filter whose frequency-amplitude characteristics match those given by vectors <code>f</code> and <code>a</code>. </p>
+<p>The output filter coefficients (taps) in <code>b</code> obey the symmetry relation:<br>$$<br>b(k)=b(n+2−k),  k=1,…,n+1<br>$$</p>
+<p>Vectors <code>f</code> and <code>a</code> specify the frequency-magnitude characteristics of the filter:</p>
+<ul>
+<li><p><code>f</code> is a vector of pairs of normalized frequency points, specified in the range between 0 and 1, where 1 corresponds to the Nyquist frequency. The frequencies must be in increasing order.</p>
+</li>
+<li><p><code>a</code> is a vector containing the desired amplitudes at the points specified in f. </p>
+<p>The desired amplitude at frequencies between pairs of points (<em>f</em>(<em>k</em>), <em>f</em>(<em>k</em>+1)) for <em>k</em> odd is the line segment connecting the points (<em>f</em>(<em>k</em>), <em>a</em>(<em>k</em>)) and (<em>f</em>(<em>k</em>+1), <em>a</em>(<em>k</em>+1)).</p>
+<p>The desired amplitude at frequencies between pairs of points (<em>f</em>(<em>k</em>), <em>f</em>(<em>k</em>+1)) for <em>k</em> even is unspecified. The areas between such points are transition or “don’t care” regions.</p>
+</li>
+<li><p><code>f</code> and <code>a</code> must be the same length. The length must be an even number.</p>
+</li>
+</ul>
+<p>The relationship between the <code>f</code> and <code>a</code> vectors in defining a desired frequency response is shown in the illustration below.</p>
+<p><img src="/2022/04/26/FIR-Filter/firls_plot.png" alt="img"></p>
+<p>b = firpm(n,f,a,w) 使用向量 w 中的权重来加权每个频带中的拟合。 w 的长度是 f 和 a 长度的一半，所以每条带正好有一个权重。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%示例</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="firpmord"><a href="#firpmord" class="headerlink" title="firpmord"></a>firpmord</h4><p>Parks-McClellan 最优 FIR 滤波器阶数估计</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[n,fo,ao,w] = firpmord(f,a,dev)</span><br><span class="line"><span class="comment">%[n,fo,ao,w] = firpmord(f,a,dev) 返回满足输入规范 f、a 和 dev 的近似阶数 n、归一化频带边缘 fo、频带幅度 ao 和权重 w。</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>f : 频带边缘，指定为实值向量。参数必须在 [0, Fs/2] 范围内，其中 Fs 是奈奎斯特频率。向量中元素的数量始终是 2 的倍数。频率必须按升序排列。</li>
+<li>a: f 中包含的点处的所需幅度，指定为向量。 f 和 a 必须满足条件 length(f) = 2length(a)–2。所需的函数是分段常数。</li>
+<li>dev :最大允许偏差，指定为向量。 dev 的大小与 a 相同。它指定了频率响应与每个频带的输出滤波器所需幅度之间的最大允许偏差或纹波。</li>
+<li>n :滤波器阶数，以正整数形式返回。</li>
+</ul>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">rp = <span class="number">3</span>;           <span class="comment">% Passband ripple in dB </span></span><br><span class="line">rs = <span class="number">40</span>;          <span class="comment">% Stopband ripple in dB</span></span><br><span class="line">fs = <span class="number">2000</span>;        <span class="comment">% Sampling frequency</span></span><br><span class="line">f = [<span class="number">500</span> <span class="number">600</span>];    <span class="comment">% Cutoff frequencies</span></span><br><span class="line">a = [<span class="number">1</span> <span class="number">0</span>];        <span class="comment">% Desired amplitudes</span></span><br><span class="line"></span><br><span class="line">dev = [(<span class="number">10</span>^(rp/<span class="number">20</span>)<span class="number">-1</span>)/(<span class="number">10</span>^(rp/<span class="number">20</span>)+<span class="number">1</span>) <span class="number">10</span>^(-rs/<span class="number">20</span>)]; </span><br><span class="line">[n,fo,ao,w] = firpmord(f,a,dev,fs);</span><br><span class="line">b = firpm(n,fo,ao,w);</span><br><span class="line">freqz(b,<span class="number">1</span>,<span class="number">1024</span>,fs)</span><br><span class="line">title(<span class="string">&#x27;Lowpass Filter Designed to Specifications&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="kaiserord"><a href="#kaiserord" class="headerlink" title="kaiserord"></a>kaiserord</h4><p><strong>kaiserord</strong>:根据过度带，纹波参数，等参数，计算凯塞窗的$\beta$值和滤波器的阶数</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[n,Wn,<span class="built_in">beta</span>,ftype] = kaiserord(f,a,dev)</span><br><span class="line">[n,Wn,<span class="built_in">beta</span>,ftype] = kaiserord(f,a,dev,fs)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="filterDesigner-工具箱设计法"><a href="#filterDesigner-工具箱设计法" class="headerlink" title="filterDesigner 工具箱设计法"></a>filterDesigner 工具箱设计法</h3><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%在命令行窗口钟输入：</span></span><br><span class="line">fdatool<span class="comment">%老版本命令</span></span><br><span class="line">filterDesigner <span class="comment">%新版本命令</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="question"><a href="#question" class="headerlink" title="question"></a>question</h2><p>使用freqz(’抽头系数‘)；可以画出这个滤波器的幅频响应与相频响应曲线；</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%1、使用上面的集中方法随便设计一个滤波器；然后画出他的相频曲线幅频曲线：</span></span><br><span class="line"><span class="comment">% H parameter</span></span><br><span class="line">f_h = [<span class="number">0.305</span> <span class="number">0.32</span>]; <span class="comment">% w_Gp w_Gs  % Cutoff frequencies 1 = fs/2 = pi</span></span><br><span class="line">h_rp = <span class="number">0.1</span>;        <span class="comment">% Passband ripple</span></span><br><span class="line">h_rs = <span class="number">70</span>;         <span class="comment">% Stopband ripple</span></span><br><span class="line"></span><br><span class="line">a  = [<span class="number">1</span> <span class="number">0</span>];        <span class="comment">% Desired amplitudes</span></span><br><span class="line">dev_h  = [(<span class="number">10</span>^(h_rp/<span class="number">20</span>)<span class="number">-1</span>)/(<span class="number">10</span>^(h_rp/<span class="number">20</span>)+<span class="number">1</span>)  <span class="number">10</span>^(-h_rs/<span class="number">20</span>)]; </span><br><span class="line">[n_h  ,fo_h  ,ao_h  ,w_h  ] = firpmord(f_h  ,a,dev_h  );</span><br><span class="line">b_h   = firpm(n_h  ,fo_h  ,ao_h  ,w_h  );</span><br><span class="line">[db_h  ,mag_h  ,hpa_h  ,grd_h  ,w1_h  ] = freqz_m(b_h  ,[<span class="number">1</span>]);</span><br><span class="line"></span><br><span class="line"><span class="built_in">figure</span>()</span><br><span class="line">freqz(b_h); <span class="comment">%这可以画出相频曲线幅频曲线</span></span><br><span class="line"><span class="built_in">figure</span>()</span><br><span class="line">[H,W] = freqz(b_h,<span class="number">1</span>);</span><br><span class="line">amp_H = <span class="built_in">abs</span>(H)</span><br><span class="line">pha_H = <span class="built_in">angle</span>(H)</span><br><span class="line">subplot(<span class="number">2</span>,<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line"><span class="built_in">plot</span>(amp_H)</span><br><span class="line">subplot(<span class="number">2</span>,<span class="number">1</span>,<span class="number">2</span>)</span><br><span class="line"><span class="built_in">plot</span>(pha_H)</span><br><span class="line"></span><br><span class="line"><span class="comment">%问题，为什么使用下面这个angle()画出的相频曲线，为什么是一个折线</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/04/26/FIR-Filter/image-20220426231955639.png" alt="image-20220426231955639"></p>
+<p><img src="/2022/04/26/FIR-Filter/image-20220426231914167.png" alt="image-20220426231914167"></p>
+<h2 id="使用FPGA硬件实现FIR滤波器"><a href="#使用FPGA硬件实现FIR滤波器" class="headerlink" title="使用FPGA硬件实现FIR滤波器"></a>使用FPGA硬件实现FIR滤波器</h2>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/FIR/" rel="tag"># FIR</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/04/23/install-config-latex/" rel="prev" title="install_config_latex">
+                  <i class="fa fa-chevron-left"></i> install_config_latex
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/04/28/SDR-note/" rel="next" title="SDR_note">
+                  SDR_note <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zsz</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

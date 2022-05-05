@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","version":"8.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="练习veriloghdlbits 学习问题记录 ！ 与~的不同是什么？？？ verilog 语法中的逻辑运算符与 verilog中自带的门电路有啥区别。  技巧禁用隐式net的创建。使用指令&#96;default_nettype 可以禁用隐式net的创建 多维向量在对象名称之前声明的维度称为“矢量宽度”维度。在对象名称之后声明的维度称为“数组”维度。reg [7:0] mem [255:0];   &#x2F;&#x2F;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/2022/04/11/verilog_hdlbits/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="练习veriloghdlbits 学习问题记录 ！ 与~的不同是什么？？？ verilog 语法中的逻辑运算符与 verilog中自带的门电路有啥区别。  技巧禁用隐式net的创建。使用指令&#96;default_nettype 可以禁用隐式net的创建 多维向量在对象名称之前声明的维度称为“矢量宽度”维度。在对象名称之后声明的维度称为“数组”维度。reg [7:0] mem [255:0];   &#x2F;&#x2F;">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/04/11/verilog_hdlbits/image-20211216220113173.png">
+<meta property="article:published_time" content="2022-04-11T15:31:10.971Z">
+<meta property="article:modified_time" content="2022-04-11T15:30:45.300Z">
+<meta property="article:author" content="zsz">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/04/11/verilog_hdlbits/image-20211216220113173.png">
+
+
+<link rel="canonical" href="http://example.com/2022/04/11/verilog_hdlbits/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/04/11/verilog_hdlbits/","path":"2022/04/11/verilog_hdlbits/","title":""}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title> | Hexo</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Hexo</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">遇见美好的每天</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">19</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">8</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">21</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0verilog"><span class="nav-number">1.</span> <span class="nav-text">练习verilog</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#hdlbits-%E5%AD%A6%E4%B9%A0%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95"><span class="nav-number">1.1.</span> <span class="nav-text">hdlbits 学习问题记录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E5%B7%A7"><span class="nav-number">1.2.</span> <span class="nav-text">技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A6%81%E7%94%A8%E9%9A%90%E5%BC%8Fnet%E7%9A%84%E5%88%9B%E5%BB%BA%E3%80%82"><span class="nav-number">1.2.1.</span> <span class="nav-text">禁用隐式net的创建。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E7%BB%B4%E5%90%91%E9%87%8F"><span class="nav-number">1.3.</span> <span class="nav-text">多维向量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%E4%B8%80%E4%B8%AA%E5%8A%A0%E6%B3%95%E5%99%A8"><span class="nav-number">1.4.</span> <span class="nav-text">如何设计一个加法器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E8%A7%82%E5%BF%B5"><span class="nav-number">1.5.</span> <span class="nav-text">设计观念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E8%AE%BE%E8%AE%A1%E4%B8%AD%E8%AF%B4%E7%9A%84%E9%81%BF%E5%85%8D%E9%94%81%E5%AD%98%E5%99%A8%E5%88%B0%E5%BA%95%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%EF%BC%9F%EF%BC%9F"><span class="nav-number">1.6.</span> <span class="nav-text">在设计中说的避免锁存器到底是什么？？？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#verilog-%E4%B8%AD%E7%9A%84casex%E7%9A%84%E7%94%A8%E6%B3%95%EF%BC%8C%E5%8F%AF%E4%BB%A5%E7%BB%BC%E5%90%88%E5%90%97-casez"><span class="nav-number">1.7.</span> <span class="nav-text">verilog 中的casex的用法，可以综合吗 casez</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bits-out-bits-%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%BD%E6%95%B0"><span class="nav-number">1.8.</span> <span class="nav-text">$bits(out) $bits 是什么函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8Everilog-%E4%B8%AD%E4%BD%BF%E7%94%A8in-sel-%E4%B8%8E-in-sel-1-4-sel4-%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">1.9.</span> <span class="nav-text">关于verilog 中使用in[sel] 与 in[(sel+1)4: sel4] 的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E7%A1%AE%E7%9A%84%E7%94%A8%E6%B3%95"><span class="nav-number">1.9.1.</span> <span class="nav-text">正确的用法:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%99%E8%AF%AF%E7%9A%84%E7%94%A8%E6%B3%95%EF%BC%9A"><span class="nav-number">1.9.2.</span> <span class="nav-text">错误的用法：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.9.3.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%8A%E5%8A%A0%E5%99%A8-%E5%85%A8%E5%8A%A0%E5%99%A8"><span class="nav-number">1.10.</span> <span class="nav-text">半加器 全加器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%A1%E8%AF%BA%E5%9B%BE%E5%8C%96%E7%AE%80%E6%B3%95"><span class="nav-number">1.11.</span> <span class="nav-text">卡诺图化简法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#verilog-%E5%AD%A6%E4%B9%A0%E7%BD%91%E7%AB%99%EF%BC%9A"><span class="nav-number">2.</span> <span class="nav-text">verilog 学习网站：</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zsz</p>
+  <div class="site-description" itemprop="description">不负光阴韶华</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/11/verilog_hdlbits/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zsz">
+      <meta itemprop="description" content="不负光阴韶华">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-04-11 23:31:10 / 修改时间：23:30:45" itemprop="dateCreated datePublished" datetime="2022-04-11T23:31:10+08:00">2022-04-11</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="练习verilog"><a href="#练习verilog" class="headerlink" title="练习verilog"></a>练习verilog</h1><h2 id="hdlbits-学习问题记录"><a href="#hdlbits-学习问题记录" class="headerlink" title="hdlbits 学习问题记录"></a>hdlbits 学习问题记录</h2><ol>
+<li>！ 与~的不同是什么？？？</li>
+<li>verilog 语法中的逻辑运算符与 verilog中自带的门电路有啥区别。</li>
+</ol>
+<h2 id="技巧"><a href="#技巧" class="headerlink" title="技巧"></a>技巧</h2><h3 id="禁用隐式net的创建。"><a href="#禁用隐式net的创建。" class="headerlink" title="禁用隐式net的创建。"></a>禁用隐式net的创建。</h3><p>使用指令`default_nettype 可以禁用隐式net的创建</p>
+<h2 id="多维向量"><a href="#多维向量" class="headerlink" title="多维向量"></a>多维向量</h2><p>在对象名称之前声明的维度称为“矢量宽度”维度。在对象名称之后声明的维度称为“数组”维度。<br>reg [7:0] mem [255:0];   // 256 unpacked elements, each of which is a 8-bit packed vector of reg.<br>reg mem2 [28:0];         // 29 unpacked elements, each of which is a 1-bit reg.</p>
+<h2 id="如何设计一个加法器"><a href="#如何设计一个加法器" class="headerlink" title="如何设计一个加法器"></a>如何设计一个加法器</h2><h2 id="设计观念"><a href="#设计观念" class="headerlink" title="设计观念"></a>设计观念</h2><p>不能先写代码，然后希望他可以生成一个合适的电路。</p>
+<h2 id="在设计中说的避免锁存器到底是什么？？？"><a href="#在设计中说的避免锁存器到底是什么？？？" class="headerlink" title="在设计中说的避免锁存器到底是什么？？？"></a>在设计中说的避免锁存器到底是什么？？？</h2><h2 id="verilog-中的casex的用法，可以综合吗-casez"><a href="#verilog-中的casex的用法，可以综合吗-casez" class="headerlink" title="verilog 中的casex的用法，可以综合吗 casez"></a>verilog 中的casex的用法，可以综合吗 casez</h2><p>verilog 中的 z x 的含义</p>
+<h2 id="bits-out-bits-是什么函数"><a href="#bits-out-bits-是什么函数" class="headerlink" title="$bits(out) $bits 是什么函数"></a>$bits(out) $bits 是什么函数</h2><h2 id="关于verilog-中使用in-sel-与-in-sel-1-4-sel4-的问题"><a href="#关于verilog-中使用in-sel-与-in-sel-1-4-sel4-的问题" class="headerlink" title="关于verilog 中使用in[sel] 与 in[(sel+1)4: sel4] 的问题"></a>关于verilog 中使用in[sel] 与 in[(sel+1)<em>4: sel</em>4] 的问题</h2><h3 id="正确的用法"><a href="#正确的用法" class="headerlink" title="正确的用法:"></a>正确的用法:</h3><p>Vector indices can be variable, as long as the synthesizer can figure out that the width of the bits being selected is constant. In particular, selecting one bit out of a vector using a variable index will work.</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> top_module( </span><br><span class="line">    <span class="keyword">input</span> [<span class="number">255</span>:<span class="number">0</span>] in,</span><br><span class="line">    <span class="keyword">input</span> [<span class="number">7</span>:<span class="number">0</span>] sel,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">reg</span> out );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">always</span> @ (*) <span class="keyword">begin</span></span><br><span class="line">        out = in[sel];</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+
+<h3 id="错误的用法："><a href="#错误的用法：" class="headerlink" title="错误的用法："></a>错误的用法：</h3><p>Vector indices can be variable, as long as the synthesizer can figure out that the width of the bits being selected is constant. It’s not always good at this. An error saying “… is not a constant” means it couldn’t prove that the select width is constant. In particular, in[ sel<em>4+3 : sel</em>4 ] does not work.<br>Bit slicing (“Indexed vector part select”, since Verilog-2001) has an even more compact syntax. </p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> top_module( </span><br><span class="line">    <span class="keyword">input</span> [<span class="number">1023</span>:<span class="number">0</span>] in,</span><br><span class="line">    <span class="keyword">input</span> [<span class="number">7</span>:<span class="number">0</span>] sel,</span><br><span class="line">    <span class="keyword">output</span> [<span class="number">3</span>:<span class="number">0</span>] out );</span><br><span class="line"></span><br><span class="line"><span class="keyword">assign</span> out = in[(sel+<span class="number">1</span>)*<span class="number">4</span> -<span class="number">1</span>:sel*<span class="number">4</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+<p>错误消息：</p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Info (<span class="number">12021</span>): Found <span class="number">0</span> design units, including <span class="number">0</span> entities, in <span class="keyword">source</span> <span class="keyword">file</span> tb_modules.sv</span><br><span class="line">Error (<span class="number">10734</span>): Verilog HDL <span class="keyword">error</span> at top_module.v(<span class="number">6</span>): sel is not a constant File: /home/h/work/hdlbits<span class="number">.2965080</span>/top_module.v Line: <span class="number">6</span></span><br><span class="line">Error: Quartus Prime Analysis &amp; Synthesis was unsuccessful. <span class="number">1</span> <span class="keyword">error</span>, <span class="number">1</span> warning</span><br><span class="line">    Error: Peak virtual <span class="keyword">memory</span>: <span class="number">386</span> megabytes</span><br><span class="line">    Error: Processing ended: Mon Dec <span class="number">13</span> <span class="number">09</span>:<span class="number">56</span>:<span class="number">29</span> <span class="number">2021</span></span><br><span class="line">    Error: Elapsed <span class="keyword">time</span>: <span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span></span><br><span class="line">    Error: Total CPU <span class="keyword">time</span> (on all processors): <span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span></span><br><span class="line">Error (<span class="number">23031</span>): Evaluation of Tcl script /home/h/hdlbits/compile.tcl unsuccessful</span><br><span class="line">Error: Quartus Prime Shell was unsuccessful. <span class="number">7</span> errors, <span class="number">1</span> warning</span><br><span class="line">    Error: Peak virtual <span class="keyword">memory</span>: <span class="number">481</span> megabytes</span><br><span class="line">    Error: Processing ended: Mon Dec <span class="number">13</span> <span class="number">09</span>:<span class="number">56</span>:<span class="number">30</span> <span class="number">2021</span></span><br><span class="line">    Error: Elapsed <span class="keyword">time</span>: <span class="number">00</span>:<span class="number">00</span>:<span class="number">02</span></span><br><span class="line">    Error: Total CPU <span class="keyword">time</span> (on all processors): <span class="number">00</span>:<span class="number">00</span>:<span class="number">01</span></span><br></pre></td></tr></table></figure>
+
+<p>高级用法：<br>可以规避[i*4]中i不是常数的错误。</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> top_module( </span><br><span class="line">    <span class="keyword">input</span> [<span class="number">1023</span>:<span class="number">0</span>] in,</span><br><span class="line">    <span class="keyword">input</span> [<span class="number">7</span>:<span class="number">0</span>] sel,</span><br><span class="line">    <span class="keyword">output</span> [<span class="number">3</span>:<span class="number">0</span>] out );</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//我的笨办法</span></span><br><span class="line"><span class="keyword">reg</span> [<span class="number">3</span>:<span class="number">0</span>] in_temp [<span class="number">255</span>:<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">genvar</span>  i;</span><br><span class="line"><span class="keyword">generate</span> </span><br><span class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">256</span>; i = i + <span class="number">1</span>) <span class="keyword">begin</span> :g</span><br><span class="line">    <span class="keyword">always</span> @ (*) <span class="keyword">begin</span>     </span><br><span class="line">        in_temp[i] = in[i*<span class="number">4</span>+<span class="number">3</span>: i*<span class="number">4</span>];</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">endgenerate</span></span><br><span class="line"><span class="keyword">assign</span> out = in_temp[sel];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//比较高明的方法：</span></span><br><span class="line">	<span class="comment">// We can&#x27;t part-select multiple bits without an error, but we can select one bit at a time,</span></span><br><span class="line">	<span class="comment">// four times, then concatenate them together.</span></span><br><span class="line">	<span class="comment">//assign out = &#123;in[sel*4+3], in[sel*4+2], in[sel*4+1], in[sel*4+0]&#125;;</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// Alternatively, &quot;indexed vector part select&quot; works better, but has an unfamiliar syntax:</span></span><br><span class="line">	<span class="comment">//assign out = in[sel*4 +: 4];		// Select starting at index &quot;sel*4&quot;, then select a total width of 4 bits with increasing (+:) index number.</span></span><br><span class="line">	<span class="comment">// assign out = in[sel*4+3 -: 4];	// Select starting at index &quot;sel*4+3&quot;, then select a total width of 4 bits with decreasing (-:) index number.</span></span><br><span class="line">	<span class="comment">// Note: The width (4 in this case) must be constant.</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>情形一：如果只是单bit的，在使用in[i*4] 选择是可以的，</p>
+<p>情形二：如果使用in[i<em>4+3 ： i</em>4]这种选择多个bit会出错，但是我们可以使用高级用法去完成这一操作。<br>有三种方法：<br>assign out = {in[sel<em>4+3], in[sel</em>4+2], in[sel<em>4+1], in[sel</em>4+0]};<br>assign out = in[sel<em>4 +: 4];<br>assign out = in[sel</em>4+3 -: 4];</p>
+<h2 id="半加器-全加器"><a href="#半加器-全加器" class="headerlink" title="半加器 全加器"></a>半加器 全加器</h2><h2 id="卡诺图化简法"><a href="#卡诺图化简法" class="headerlink" title="卡诺图化简法"></a>卡诺图化简法</h2><p>理论：</p>
+<p>注意： 只能圈起来2^n个最小项。</p>
+<ol>
+<li>将函数化为最小项之和的形式，</li>
+<li>画出表示该逻辑函数的卡诺图</li>
+<li>找出可以合并的最小项</li>
+<li>选取化简后的乘积项，选取原则是：<ol>
+<li>这些成绩项应包含函数式中所有的最小项（应覆盖卡诺图中所有的1）。</li>
+<li>所用的乘积项数目最少。也就是可合并的最小项组成的矩阵数目最少。</li>
+<li>每个乘积项包含的因子最少。也就是每个可合并的最小项矩形组中应该包含最多的最小项。</li>
+</ol>
+</li>
+</ol>
+<p>练习</p>
+<p><img src="/2022/04/11/verilog_hdlbits/image-20211216220113173.png" alt="image-20211216220113173"></p>
+<p>hdlbits 中关于卡诺图的化简：</p>
+<p>Minimum SOP and POS <a target="_blank" rel="noopener" href="https://hdlbits.01xz.net/wiki/Exams/ece241_2013_q2">https://hdlbits.01xz.net/wiki/Exams/ece241_2013_q2</a><br>SOP 积之和 圈1和doncare项</p>
+<p>pos 和之积 圈0和doncare项 之后 整体取反 再根据德摩根律化简即可。</p>
+<h1 id="verilog-学习网站："><a href="#verilog-学习网站：" class="headerlink" title="verilog 学习网站："></a>verilog 学习网站：</h1><p>HDLBits <a target="_blank" rel="noopener" href="https://hdlbits.01xz.net/wiki/Main_Page">https://hdlbits.01xz.net/wiki/Main_Page</a><br>菜鸟教程 </p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/04/11/install_quartus/" rel="prev" title="">
+                  <i class="fa fa-chevron-left"></i> 
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/04/11/matlab-note-1/" rel="next" title="matlab_note_1">
+                  matlab_note_1 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zsz</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

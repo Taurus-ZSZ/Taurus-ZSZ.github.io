@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","version":"8.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="[TOC] Archlinux 安装笔记问题记录 在使用live系统完成了分区与引导器的安装后，由于我没有安装sudo,dhcpcd导致了我启动系统后无法配置网络，无法连接到网络，无法使用visudo 在发现系统的配置错误后，可以重新通过live镜像进行修改。 为什么那个自由软件者的kde桌面安装教程没有安装xorg 显示主文件磁盘空间不足&#x2F;分配了10G   Arch Linux 日常使用更新系统">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Archlinu-install-note">
+<meta property="og:url" content="http://example.com/2021/09/13/Archlinu-install-note/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="[TOC] Archlinux 安装笔记问题记录 在使用live系统完成了分区与引导器的安装后，由于我没有安装sudo,dhcpcd导致了我启动系统后无法配置网络，无法连接到网络，无法使用visudo 在发现系统的配置错误后，可以重新通过live镜像进行修改。 为什么那个自由软件者的kde桌面安装教程没有安装xorg 显示主文件磁盘空间不足&#x2F;分配了10G   Arch Linux 日常使用更新系统">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2021/09/13/Archlinu-install-note/image-20220505210655117.png">
+<meta property="og:image" content="http://example.com/2021/09/13/Archlinu-install-note/image-20220505210808581.png">
+<meta property="og:image" content="http://example.com/2021/09/13/Archlinu-install-note/image-20220505211507450.png">
+<meta property="og:image" content="http://example.com/2021/09/13/Archlinu-install-note/image-20220505223606959.png">
+<meta property="og:image" content="http://example.com/2021/09/13/Archlinu-install-note/image-20220505223621331.png">
+<meta property="article:published_time" content="2021-09-12T22:45:21.000Z">
+<meta property="article:modified_time" content="2022-05-05T14:42:54.147Z">
+<meta property="article:author" content="zsz">
+<meta property="article:tag" content="-- Archlinux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/09/13/Archlinu-install-note/image-20220505210655117.png">
+
+
+<link rel="canonical" href="http://example.com/2021/09/13/Archlinu-install-note/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2021/09/13/Archlinu-install-note/","path":"2021/09/13/Archlinu-install-note/","title":"Archlinu-install-note"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Archlinu-install-note | Hexo</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Hexo</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">遇见美好的每天</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">19</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">8</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">21</span></a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Archlinux-%E5%AE%89%E8%A3%85%E7%AC%94%E8%AE%B0"><span class="nav-number">1.</span> <span class="nav-text">Archlinux 安装笔记</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95"><span class="nav-number">1.1.</span> <span class="nav-text">问题记录</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Arch-Linux-%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">Arch Linux 日常使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0%E7%B3%BB%E7%BB%9F"><span class="nav-number">2.1.</span> <span class="nav-text">更新系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E8%BD%AF%E4%BB%B6"><span class="nav-number">2.2.</span> <span class="nav-text">安装软件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD%E6%96%87%E4%BB%B6"><span class="nav-number">2.3.</span> <span class="nav-text">下载文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#linux-wget%E6%8C%87%E5%AE%9A%E4%B8%8B%E8%BD%BD%E7%9B%AE%E5%BD%95%E5%92%8C%E9%87%8D%E5%91%BD%E5%90%8D"><span class="nav-number">2.3.1.</span> <span class="nav-text">linux wget指定下载目录和重命名</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E6%BF%80%E6%B4%BBxmind"><span class="nav-number">2.4.</span> <span class="nav-text">安装激活xmind</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#arch-Linux-%E5%AE%89%E8%A3%85pip%E7%9A%84%E4%B8%80%E7%A7%8D%E6%96%B9%E6%B3%95"><span class="nav-number">2.5.</span> <span class="nav-text">arch Linux 安装pip的一种方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9A%A0%E8%AD%A6%E5%91%8A"><span class="nav-number">2.5.1.</span> <span class="nav-text">⚠警告</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%A5%E9%94%99"><span class="nav-number">2.6.</span> <span class="nav-text">报错</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ubuntu-%E6%9B%B4%E6%96%B0%E8%BD%AF%E4%BB%B6"><span class="nav-number">3.</span> <span class="nav-text">ubuntu 更新软件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A3%E7%90%86%E6%90%AD%E5%BB%BAproxy-pool"><span class="nav-number">4.</span> <span class="nav-text">代理搭建proxy_pool</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ubuntu-16-04-%E5%AE%89%E8%A3%85python3-6%E5%90%8E%E6%97%A0%E6%B3%95%E6%89%93%E5%BC%80%E7%BB%88%E7%AB%AF"><span class="nav-number">5.</span> <span class="nav-text">ubuntu 16.04 安装python3.6后无法打开终端</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8E%E6%BA%90%E4%BB%A3%E7%A0%81%E5%AE%89%E8%A3%85Python-3-6%E4%B9%8B%E5%90%8E%EF%BC%8C%E6%B2%A1%E6%9C%89%E5%90%8D%E4%B8%BA%E2%80%9C-lsb-release%E2%80%9D%E7%9A%84%E6%A8%A1%E5%9D%97"><span class="nav-number">5.1.</span> <span class="nav-text">从源代码安装Python 3.6之后，没有名为“ lsb_release”的模块</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#archlinux-%E8%AE%BF%E9%97%AEwin10%E5%85%B1%E4%BA%AB%E6%96%87%E4%BB%B6%E5%A4%B9"><span class="nav-number">6.</span> <span class="nav-text">archlinux 访问win10共享文件夹</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Archlinux-%E5%AE%89%E8%A3%85Matlab2018a"><span class="nav-number">7.</span> <span class="nav-text">Archlinux 安装Matlab2018a</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">7.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BF%80%E6%B4%BB"><span class="nav-number">7.2.</span> <span class="nav-text">激活</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zsz</p>
+  <div class="site-description" itemprop="description">不负光阴韶华</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/09/13/Archlinu-install-note/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zsz">
+      <meta itemprop="description" content="不负光阴韶华">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Archlinu-install-note
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-09-13 06:45:21" itemprop="dateCreated datePublished" datetime="2021-09-13T06:45:21+08:00">2021-09-13</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2022-05-05 22:42:54" itemprop="dateModified" datetime="2022-05-05T22:42:54+08:00">2022-05-05</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">-- linux</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>[TOC]</p>
+<h1 id="Archlinux-安装笔记"><a href="#Archlinux-安装笔记" class="headerlink" title="Archlinux 安装笔记"></a>Archlinux 安装笔记</h1><h2 id="问题记录"><a href="#问题记录" class="headerlink" title="问题记录"></a>问题记录</h2><ol>
+<li>在使用live系统完成了分区与引导器的安装后，由于我没有安装sudo,dhcpcd导致了我启动系统后无法配置网络，无法连接到网络，无法使用visudo</li>
+<li>在发现系统的配置错误后，可以重新通过live镜像进行修改。</li>
+<li>为什么那个自由软件者的kde桌面安装教程没有安装xorg</li>
+<li>显示主文件磁盘空间不足/分配了10G</li>
+<li></li>
+</ol>
+<h1 id="Arch-Linux-日常使用"><a href="#Arch-Linux-日常使用" class="headerlink" title="Arch Linux 日常使用"></a>Arch Linux 日常使用</h1><h2 id="更新系统"><a href="#更新系统" class="headerlink" title="更新系统"></a>更新系统</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pacman -Syyu    #升级系统中全部包</span><br></pre></td></tr></table></figure>
+
+<h2 id="安装软件"><a href="#安装软件" class="headerlink" title="安装软件"></a>安装软件</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pacman -S package_name1 package_name2 ...</span><br><span class="line">pacman -S --noconfirm  gcc </span><br><span class="line"><span class="meta">#</span><span class="bash"> man pacman 为什么不能使用</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="下载文件"><a href="#下载文件" class="headerlink" title="下载文件"></a>下载文件</h2><h3 id="linux-wget指定下载目录和重命名"><a href="#linux-wget指定下载目录和重命名" class="headerlink" title="linux wget指定下载目录和重命名"></a>linux wget指定下载目录和重命名</h3><p>当我们在使用wget命令下载文件时，通常会需要将文件下载到指定的目录，这时就可以使用 -P 参数来指定目录，如果指定的目录不存在，则会自动创建。</p>
+<p>示例：</p>
+<p>wget -P /usr/local/src <a target="_blank" rel="noopener" href="http://download.redis.io/releases/redis-4.0.9.tar.gz">http://download.redis.io/releases/redis-4.0.9.tar.gz</a></p>
+<p>如果需要对下载的文件进行重命名，则可以通过 -O 参数指定文件名，需要注意的是，如果重命名中包含路径，那么该路径必须实现创建好。</p>
+<p>示例：</p>
+<p>wget <a target="_blank" rel="noopener" href="http://download.redis.io/releases/redis-4.0.9.tar.gz">http://download.redis.io/releases/redis-4.0.9.tar.gz</a> -O /usr/local/src/redis.tar.gz</p>
+<p>经测试 小写的和大写的都可以 但是大写的会显示下载过程 小写的不会</p>
+<h2 id="安装激活xmind"><a href="#安装激活xmind" class="headerlink" title="安装激活xmind"></a>安装激活xmind</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">编辑</span><br><span class="line">/etc/environment</span><br><span class="line">添加</span><br><span class="line">VANA_LICENSE_MODE=true</span><br><span class="line">VANA_LIENCE_TO=ZSZ</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="arch-Linux-安装pip的一种方法"><a href="#arch-Linux-安装pip的一种方法" class="headerlink" title="arch Linux 安装pip的一种方法"></a>arch Linux 安装pip的一种方法</h2><p>文档链接：<a target="_blank" rel="noopener" href="https://pip.pypa.io/en/stable/installation/">https://pip.pypa.io/en/stable/installation/</a></p>
+<p>​    </p>
+<h3 id="⚠警告"><a href="#⚠警告" class="headerlink" title="⚠警告"></a>⚠警告</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@ae5d7bf3b1fc python_pip]# wget 	https://bootstrap.pypa.io/get-pip.py</span><br><span class="line">[root@ae5d7bf3b1fc python_pip]# python3 ./get-pip.py </span><br><span class="line">Collecting pip</span><br><span class="line">  Downloading pip-21.2.4-py3-none-any.whl (1.6 MB)</span><br><span class="line">     |████████████████████████████████| 1.6 MB 24.0 MB/s </span><br><span class="line">Collecting setuptools</span><br><span class="line">  Downloading setuptools-58.2.0-py3-none-any.whl (946 kB)</span><br><span class="line">     |████████████████████████████████| 946 kB 32.6 MB/s </span><br><span class="line">Collecting wheel</span><br><span class="line">  Downloading wheel-0.37.0-py2.py3-none-any.whl (35 kB)</span><br><span class="line">Installing collected packages: wheel, setuptools, pip</span><br><span class="line">Successfully installed pip-21.2.4 setuptools-58.2.0 wheel-0.37.0</span><br><span class="line">WARNING: Running pip as the &#x27;root&#x27; user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>创建我的archlinux 镜像</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> archlinux</span><br><span class="line"><span class="keyword">MAINTAINER</span> zsz&lt;<span class="number">2668838984</span>@qq.com&gt;</span><br><span class="line"></span><br><span class="line"><span class="keyword">ENV</span> MYPATH /home</span><br><span class="line"></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="bash"> <span class="variable">$MYPATH</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> pacman -Syuu</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> pacman -S python3</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> pacman -S </span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="报错"><a href="#报错" class="headerlink" title="报错"></a>报错</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">root@d61d4b3a39dc:/migen# python3 ./setup.py </span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File &quot;./setup.py&quot;, line 4, in &lt;module&gt;</span><br><span class="line">    from setuptools import setup</span><br><span class="line">ModuleNotFoundError: No module named &#x27;setuptools&#x27;</span><br><span class="line">root@d61d4b3a39dc:/migen# python3 ./setup.py develop --user</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File &quot;./setup.py&quot;, line 4, in &lt;module&gt;</span><br><span class="line">    from setuptools import setup</span><br><span class="line">ModuleNotFoundError: No module named &#x27;setuptools&#x27;</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash">安装python3-setuptools</span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># Ubuntu</span></span></span><br><span class="line">apt-get install python3-setuptools</span><br><span class="line"><span class="meta">#</span><span class="bash">使用脚本安装</span></span><br><span class="line">wget  https://bootstrap.pypa.io/get-pip.py</span><br><span class="line">chmod +x ./get-pip.py</span><br><span class="line">python get-pip.py</span><br><span class="line"></span><br><span class="line">apt-get install python3-pip</span><br><span class="line"><span class="meta">#</span><span class="bash">安装</span></span><br><span class="line">apt-get install verilator</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash">archlinux</span></span><br><span class="line">pacman -S python-setuptools</span><br><span class="line"><span class="meta">#</span><span class="bash">这条命令安装后，执行./litex_setup.py init install --user 时出错。 又试了一遍又可以了！！！！</span></span><br><span class="line"><span class="meta">#</span><span class="bash">通过安装pip使用pip install setuptools 后成功安装。</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="ubuntu-更新软件"><a href="#ubuntu-更新软件" class="headerlink" title="ubuntu 更新软件"></a>ubuntu 更新软件</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">apt-get update: 升级安装包相关的命令,刷新可安装的软件列表(但是不做任何实际的安装动作)</span><br><span class="line"></span><br><span class="line">apt-get upgrade: 进行安装包的更新(软件版本的升级)</span><br><span class="line"></span><br><span class="line">apt-get dist-upgrade: 进行系统版本的升级(Ubuntu版本的升级)</span><br><span class="line"></span><br><span class="line">do-release-upgrade: Ubuntu官方推荐的系统升级方式,若加参数-d还可以升级到开发版本,但会不稳定</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>​    </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">docker run -it -v /home/proton/app/config/config.toml:/app/config --name tsrrr 7bc49bdacfa2 /app/rly -config config/config.toml</span><br><span class="line">docker run -it -v /home/proton/app/config/rly.toml:/bin/rly.toml --name tsdrrr 7bc49bdacfa2 /bin/rly -config config/rly.toml</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">在学习docker的时候，经常会编译docker镜像，很多都是基于上一个Dockerfile修改编译而来，因此出现了很多REPOSITORY 和 TAG 为 none 的镜像。每次 docker images 查看镜像，都会列出一长串，有的时候一屏还展示不全，所以就想要删除某些镜像。但是一个一个删又很费时，那就只有批量删除了。</span><br><span class="line">使用 grep 函数查找出所有包含 none 的镜像，然后使用 awk 函数找出所有的镜像ID，并将它们作为参数，使用 docker rmi 命令删除所有包含 none 的镜像。</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 查询所有匹配上的docker镜像ID</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> docker images | grep none | awk <span class="string">&#x27;&#123;print $3&#125;&#x27;</span></span></span><br><span class="line"></span><br><span class="line">docker ps -a | grep 7bc49bdacfa2 | awk &#x27;&#123;print $3&#125;&#x27;</span><br><span class="line">docker images | grep none | awk &#x27;&#123;print $3&#125;&#x27; | xargs docker rmi</span><br><span class="line"></span><br><span class="line">docker ps -a | grep 7bc49bdacfa2 | awk &#x27;&#123;print $1&#125;&#x27;</span><br><span class="line">docker ps -a | grep 7bc49bdacfa2 | awk &#x27;&#123;print $1&#125;&#x27; | xargs docker rm</span><br><span class="line"></span><br><span class="line">docker ps -a | grep e8e9f8df3fbc | awk &#x27;&#123;print $1&#125;&#x27;</span><br><span class="line">docker ps -a | grep e8e9f8df3fbc | awk &#x27;&#123;print $1&#125;&#x27; | xargs docker rm</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">docker images | grep jhao104/proxy_pool:latest | awk &#x27;&#123;print $3&#125;&#x27; | xargs docker rmi</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#rly 那个</span></span></span><br><span class="line">apt-get install vim</span><br><span class="line">apt-get install make</span><br><span class="line">apt-get install yarn</span><br><span class="line">apt-get install git</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="代理搭建proxy-pool"><a href="#代理搭建proxy-pool" class="headerlink" title="代理搭建proxy_pool"></a>代理搭建proxy_pool</h1><p>1、pull docker images</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull jhao104/proxy_pool</span><br></pre></td></tr></table></figure>
+
+<p>2、运行docker 注意这里的docker使用的是外部的redis,需要重新配置本地的redis</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">我第一步运行的是</span> </span><br><span class="line">docker pull jhao104/proxy_pool</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash">然后我就运行了</span></span><br><span class="line"><span class="meta">#</span><span class="bash">注意默认的redis没有密码访问：</span></span><br><span class="line">docker run --env DB_CONN=redis://@173.82.54.177:6379/0 -p 5010:5010 jhao104/proxy_pool:latest</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="ubuntu-16-04-安装python3-6后无法打开终端"><a href="#ubuntu-16-04-安装python3-6后无法打开终端" class="headerlink" title="ubuntu 16.04 安装python3.6后无法打开终端"></a>ubuntu 16.04 安装python3.6后无法打开终端</h1><p>安装python3.6后 快捷键Ctrl+alt+T不行，在Applications里面点击图标也打不开：<br>##参考链接<br>安装python3.6 <a target="_blank" rel="noopener" href="https://tding.top/archives/3868725a.html">https://tding.top/archives/3868725a.html</a><br>解决参考连接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_39717318/article/details/111447840">https://blog.csdn.net/weixin_39717318/article/details/111447840</a></p>
+<ol>
+<li> ctrl+alt+f1 ，输入gnome-terminal，查看无法启动的错误原因</li>
+</ol>
+<p>$ gnome-terminal</p>
+<ol start="2">
+<li>提示错误信息如下：Traceback (most recent call last):</li>
+</ol>
+<p>File “/usr/bin/gnome-terminal”, line 9, in</p>
+<p>from gi.repository import GLib, Gio</p>
+<p>File “/usr/lib/python3/dist-packages/gi/<strong>init</strong>.py”, line 42, in</p>
+<p>from . import _gi</p>
+<p>ImportError: cannot import name ‘_gi’</p>
+<ol start="3">
+<li>查找_gi的库文件$ ls -la /usr/lib/python3/dist-packages/gi/</li>
+</ol>
+<p>_gi_cairo.cpython-35m-x86_64-Linux-gnu.so</p>
+<p>_gi.cpython-35m-x86_64-Linux-gnu.so</p>
+<p>……..</p>
+<ol start="4">
+<li>复制一份3.6使用的库文件</li>
+</ol>
+<p>$ cd /usr/lib/python3/dist-packages/gi/</p>
+<p>$ sudo cp _gi.cpython-35m-x86_64-Linux-gnu.so _gi.cpython-36m-x86_64-Linux-gnu.so</p>
+<p>$ sudo cp _gi_cairo.cpython-35m-x86_64-Linux-gnu.so _gi_cairo.cpython-36m-x86_64-Linux-gnu.so</p>
+<p>注意：<br>最后，还要注意一下，你的python3是安装在哪里的：</p>
+<p>看看python3装在哪儿<br>由于我的python3.6的位置原因需要将gi/文件夹拷贝到<br>/usr/local/python3.6/lib/python3.6/site-packages/</p>
+<p>所以需要：sudo cp -fr /usr/lib/python3/dist-packages/gi/ /usr/local/python3.6/lib/python3.6/site-packages/</p>
+<ol>
+<li>alt+ctrl+f7返回，重新尝试打开终端，问题解决</li>
+</ol>
+<h2 id="从源代码安装Python-3-6之后，没有名为“-lsb-release”的模块"><a href="#从源代码安装Python-3-6之后，没有名为“-lsb-release”的模块" class="headerlink" title="从源代码安装Python 3.6之后，没有名为“ lsb_release”的模块"></a>从源代码安装Python 3.6之后，没有名为“ lsb_release”的模块</h2><p>注意由于我的python3.6所在的位置是/usr/local/python3.6</p>
+<p>通过 sys.path 找到了我的路径是<br>/usr/local/python3.6/lib/python3.6/site-packages<br>所以</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ln -s /usr/share/pyshared/lsb_release.py /usr/local/python3.6/lib/python3.6/site-packages/lsb_release.py</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">说明：</span><br><span class="line"></span><br><span class="line">我们可以看到 /usr/bin/lsb_release</span><br><span class="line"></span><br><span class="line">#!/usr/bin/python3 -Es</span><br><span class="line"></span><br><span class="line"># lsb_release command for Debian</span><br><span class="line"># (C) 2005-10 Chris Lawrence &lt;lawrencc@debian.org&gt;</span><br><span class="line">#    This package is free software; you can redistribute it and/or modify</span><br><span class="line">#    it under the terms of the GNU General Public License as published by</span><br><span class="line">#    the Free Software Foundation; version 2 dated June, 1991.</span><br><span class="line">#    This package is distributed in the hope that it will be useful,</span><br><span class="line">#    but WITHOUT ANY WARRANTY; without even the implied warranty of</span><br><span class="line">#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span><br><span class="line">#    GNU General Public License for more details.</span><br><span class="line">#    You should have received a copy of the GNU General Public License</span><br><span class="line">#    along with this package; if not, write to the Free Software</span><br><span class="line">#    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA</span><br><span class="line">#    02110-1301 USA</span><br><span class="line">from optparse import OptionParser</span><br><span class="line">import sys</span><br><span class="line">import os</span><br><span class="line">import re</span><br><span class="line"></span><br><span class="line">import lsb_release</span><br><span class="line"></span><br><span class="line">关键步骤是import lsb_release，但是问题是Python 3.6没有此模块。</span><br><span class="line"></span><br><span class="line">因此，您必须已覆盖python3从python3.5到python3.6。这就是为什么你lsb_release坏了。</span><br><span class="line"></span><br><span class="line">要进行验证，我们可以在中看到python3.6：</span><br><span class="line"></span><br><span class="line">➜  ~ python3.6 </span><br><span class="line">Python 3.6.4 (default, Feb  6 2018, 16:57:12) </span><br><span class="line">[GCC 5.4.0 20160609] on linux</span><br><span class="line">Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.</span><br><span class="line">&gt;&gt;&gt; import lsb_release</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;</span><br><span class="line">ModuleNotFoundError: No module named &#x27;lsb_release&#x27;</span><br><span class="line"></span><br><span class="line">然后在python3.5：</span><br><span class="line"></span><br><span class="line">➜  ~ python3.5</span><br><span class="line">Python 3.5.2 (default, Nov 23 2017, 16:37:01) </span><br><span class="line">[GCC 5.4.0 20160609] on linux</span><br><span class="line">Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.</span><br><span class="line">&gt;&gt;&gt; import lsb_release</span><br><span class="line">&gt;&gt;&gt; lsb_release.__file__</span><br><span class="line">&#x27;/usr/lib/python3/dist-packages/lsb_release.py&#x27;</span><br><span class="line"></span><br><span class="line">该文件在哪里：</span><br><span class="line"></span><br><span class="line">➜  ~ ll /usr/lib/python3/dist-packages/lsb_release.py</span><br><span class="line">lrwxrwxrwx 1 root root 38 Jul   7  2016 /usr/lib/python3/dist-packages/lsb_release.py -&gt; ../../../share/pyshared/lsb_release.py</span><br><span class="line"></span><br><span class="line">因此，此模块lsb_release存在于中，python3.5但不存在于中python3.6。我们最终找到了它！</span><br><span class="line"></span><br><span class="line">现在，通过添加到原始lsb_release.py文件的链接来修复它！</span><br><span class="line"></span><br><span class="line">这个对我有用！</span><br></pre></td></tr></table></figure>
+
+<h1 id="archlinux-访问win10共享文件夹"><a href="#archlinux-访问win10共享文件夹" class="headerlink" title="archlinux 访问win10共享文件夹"></a>archlinux 访问win10共享文件夹</h1><p>首先使用archlinux ping 通win</p>
+<p>2、 在archlinux的文件管理中，打开一个网络的位置，选择smb的输入</p>
+<p>smb://192.168.1.6然后会提示你输入账号与密码，账号是win下，微软账号，或者是本地账号，密码是对应账号的密码。</p>
+<p>然后就可以访问win下共享的文件夹了</p>
+<h1 id="Archlinux-安装Matlab2018a"><a href="#Archlinux-安装Matlab2018a" class="headerlink" title="Archlinux 安装Matlab2018a"></a>Archlinux 安装Matlab2018a</h1><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><ol>
+<li><p>在百度网盘下载两个两个iso文件，然后将他们解压到同一个文件夹下，复制到archlinux 中，还有要复制crack文件</p>
+</li>
+<li><p>进入复制到archlinux中的matlab的安装文件夹，打开终端，</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo ./install</span><br><span class="line"><span class="comment">#以管理员的身份进行安装</span></span><br></pre></td></tr></table></figure></li>
+<li><p>选择使用文件安装密钥</p>
+<p><img src="/2021/09/13/Archlinu-install-note/image-20220505210655117.png" alt="image-20220505210655117"></p>
+</li>
+<li><p>点击下一步，点击同意条款，点击下一步</p>
+</li>
+<li><p>提供安装密钥，这个密钥在crack压缩包里，我们打开压缩包</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mkdir crack</span><br><span class="line">tar -xzvf ./matlabxxxxxxcrack.tar.gz ./crack</span><br><span class="line"><span class="built_in">cd</span> ./crack </span><br><span class="line"><span class="comment">#在解压的文件夹中有一个叫readme.txt的文件</span></span><br><span class="line"><span class="comment">#使用</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2021/09/13/Archlinu-install-note/image-20220505210808581.png" alt="image-20220505210808581"></p>
+<p>使用这一个密钥</p>
+<p><img src="/2021/09/13/Archlinu-install-note/image-20220505211507450.png" alt="image-20220505211507450"></p>
+</li>
+<li><p>选择安装目录，我选择安装在<code>/opt/MATLAB</code>下</p>
+</li>
+<li><p>后面就是一直下一步，下一步安装就好了</p>
+</li>
+<li><p>安装完成后开始准备激活</p>
+</li>
+</ol>
+<h2 id="激活"><a href="#激活" class="headerlink" title="激活"></a>激活</h2><ol>
+<li><p>进入<code>/opt/MATLAB/R2018a/bin</code>下，执行<code>./matlab</code></p>
+<ul>
+<li><p>如果报错</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">MATLAB is selecting SOFTWARE OPENGL rendering.</span><br><span class="line">/opt/MATLAB/R2018a/bin/glnxa64/MATLAB: error <span class="keyword">while</span> loading shared libraries: libcrypt.so.1: cannot open shared object file: No such file or directory</span><br><span class="line"><span class="comment">#需要安装</span></span><br><span class="line">sudo pacman -S libxcrypt-compat</span><br></pre></td></tr></table></figure></li>
+<li><p>使用./matlab后，如果报错</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#如果报下面的错误</span></span><br><span class="line">MATLAB is selecting SOFTWARE OPENGL rendering.</span><br><span class="line">License checkout failed.</span><br><span class="line">License Manager Error -15</span><br><span class="line">MATLAB is unable to connect to the license server. </span><br><span class="line">Check that the license manager has been started, and that the MATLAB client machine can communicate</span><br><span class="line">with the license server.</span><br><span class="line"></span><br><span class="line">Troubleshoot this issue by visiting: </span><br><span class="line">https://www.mathworks.com/support/lme/R2018a/15</span><br><span class="line"></span><br><span class="line">Diagnostic Information:</span><br><span class="line">Feature: MATLAB </span><br><span class="line">License path: 27000@waves-pc.localdomain:/opt/IC_EDA/Questasim10.7/questasim/License/mentor.dat:/home/waves/.matla</span><br><span class="line">b/R2018a_licenses:/opt/MATLAB/R2018a/licenses/license.dat:/opt/MATLAB/R2018a/licenses/*.lic </span><br><span class="line">Licensing error: -15,570. System Error: 115</span><br><span class="line"><span class="comment">#使用下面这一条命令解决</span></span><br><span class="line">sudo ./matlab</span><br></pre></td></tr></table></figure></li>
+<li><p><img src="/2021/09/13/Archlinu-install-note/image-20220505223606959.png" alt="image-20220505223606959"></p>
+</li>
+<li><p><img src="/2021/09/13/Archlinu-install-note/image-20220505223621331.png" alt="image-20220505223621331"></p>
+</li>
+<li><p>激活完成后还需要copy 补丁文件</p>
+</li>
+</ul>
+</li>
+<li><p>copy补丁文件</p>
+<p>到crack文件夹下，找到<code>R2018a\bin\glnxa64\</code>复制到安装目录下，相同的位置覆盖原来的文件。</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://wiki.archlinux.org/title/MATLAB_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#%E5%AE%89%E8%A3%85%E6%97%B6library%E9%94%99%E8%AF%AF">创建快捷方式</a></p>
+<p>在<code>/usr/share/applications/</code>文件夹下创建<code>matlab.desktop</code>文件内容如下。完成后保存退出。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#/usr/share/applications/matlab.desktop</span></span><br><span class="line"></span><br><span class="line">[Desktop Entry]</span><br><span class="line">Version=R2018a</span><br><span class="line">Type=Application</span><br><span class="line">Terminal=<span class="literal">false</span></span><br><span class="line">MimeType=text/x-matlab</span><br><span class="line">Exec=/opt/MATLAB/R2018a/bin/matlab -desktop</span><br><span class="line">Name=MATLAB</span><br><span class="line">Icon=matlab</span><br><span class="line">Categories=Development;Math;Science</span><br><span class="line">Comment=Scientific computing environment</span><br><span class="line">StartupNotify=<span class="literal">true</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Archlinux/" rel="tag"># -- Archlinux</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/09/06/Xilinx-Remote-Update/" rel="prev" title="Xilinx_Remote_Update">
+                  <i class="fa fa-chevron-left"></i> Xilinx_Remote_Update
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/09/22/Docker-notes/" rel="next" title="Docker 学习笔记">
+                  Docker 学习笔记 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zsz</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
