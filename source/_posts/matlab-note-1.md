@@ -115,6 +115,17 @@ iswmpty(a)
 	sum(a(:))	%对a求和	
 %matlab中矩阵的索引是按照列来的。
 
+%左右翻转
+a = 1:8;
+fliplr(a)
+%上下翻转操作
+b=(1:9)';
+flipud(b)
+
+%reshape()函数为对矩阵的行和列进行重新排列的函数，需要注意的是，排列过程中不能改变矩阵中的元素个数，本例中元素个数为9，因此只能改变为9×1、1×9两种形式。
+A = [1,2,3;4,5,6;7,8,9]
+B=reshape(A,9,1) %将矩阵A由3×3改变为9×1即9行1列，
+
 ```
 
 ## 4. cell 变量
@@ -176,6 +187,36 @@ a*b %进行矩阵乘法
 
 for 循环
 
+```matlab
+for(i = (1:K))
+    for(j=(1:P))
+        fir_zu_coef(i,j*2-1)=lp_fir_coef(i+(j-1)*K);
+    end
+end
+```
+
+
+
+switch
+
+```matlab
+sig_mode = 2;
+switch sig_mode
+    case 0
+        signal =signal_1;
+    case 1
+        signal =signal_3 +  signal_1;
+    case 2
+        signal = singal_lfm_1  +  signal_1  ;
+    case 3
+        signal = singal_lfm_1 + signal_3 +  signal_1  ;
+    otherwise 
+        signal =signal_1;
+end
+```
+
+
+
 
 
 ## 7.函数
@@ -208,10 +249,16 @@ y = f(1,2)
 
 ## 8.绘图
 
+设置figure 窗口的属性
+
+```matlab
+%figure('Name','Measured Data','NumberTitle','off');
+figure('numbertitle','off','name','原型信道化输出 IQ与包络信号')
+```
+
 
 
 ```matlab
-
 a = 0:0.01:10;
 y = sin(a);
 plot(a,y)
@@ -306,4 +353,6 @@ a = py.numpy.array([1,2,3,4])%这个指令不对
 
 
 ## 15.结构体
+
+
 

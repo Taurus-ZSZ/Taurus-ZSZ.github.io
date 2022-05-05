@@ -357,3 +357,125 @@ lrwxrwxrwx 1 root root 38 Jul   7  2016 /usr/lib/python3/dist-packages/lsb_relea
 这个对我有用！
 ```
 
+# archlinux 访问win10共享文件夹
+
+首先使用archlinux ping 通win
+
+2、 在archlinux的文件管理中，打开一个网络的位置，选择smb的输入
+
+smb://192.168.1.6然后会提示你输入账号与密码，账号是win下，微软账号，或者是本地账号，密码是对应账号的密码。
+
+然后就可以访问win下共享的文件夹了
+
+
+
+# Archlinux 安装Matlab2018a
+
+## 安装
+
+1. 在百度网盘下载两个两个iso文件，然后将他们解压到同一个文件夹下，复制到archlinux 中，还有要复制crack文件
+
+2. 进入复制到archlinux中的matlab的安装文件夹，打开终端，
+
+   ```sh
+   sudo ./install
+   #以管理员的身份进行安装
+   ```
+
+3. 选择使用文件安装密钥
+
+   ![image-20220505210655117](Archlinu-install-note/image-20220505210655117.png)
+
+4. 点击下一步，点击同意条款，点击下一步
+
+5. 提供安装密钥，这个密钥在crack压缩包里，我们打开压缩包
+
+   ```sh
+   mkdir crack
+   tar -xzvf ./matlabxxxxxxcrack.tar.gz ./crack
+   cd ./crack 
+   #在解压的文件夹中有一个叫readme.txt的文件
+   #使用
+   ```
+
+   
+
+   ![image-20220505210808581](Archlinu-install-note/image-20220505210808581.png)
+
+   使用这一个密钥
+
+   ![image-20220505211507450](Archlinu-install-note/image-20220505211507450.png)
+
+6. 选择安装目录，我选择安装在`/opt/MATLAB`下
+
+7. 后面就是一直下一步，下一步安装就好了
+
+8. 安装完成后开始准备激活
+
+## 激活
+
+1. 进入`/opt/MATLAB/R2018a/bin`下，执行`./matlab`
+
+   - 如果报错
+
+     ```sh
+     MATLAB is selecting SOFTWARE OPENGL rendering.
+     /opt/MATLAB/R2018a/bin/glnxa64/MATLAB: error while loading shared libraries: libcrypt.so.1: cannot open shared object file: No such file or directory
+     #需要安装
+     sudo pacman -S libxcrypt-compat
+     ```
+
+   - 使用./matlab后，如果报错
+
+     ```sh
+     #如果报下面的错误
+     MATLAB is selecting SOFTWARE OPENGL rendering.
+     License checkout failed.
+     License Manager Error -15
+     MATLAB is unable to connect to the license server. 
+     Check that the license manager has been started, and that the MATLAB client machine can communicate
+     with the license server.
+     
+     Troubleshoot this issue by visiting: 
+     https://www.mathworks.com/support/lme/R2018a/15
+     
+     Diagnostic Information:
+     Feature: MATLAB 
+     License path: 27000@waves-pc.localdomain:/opt/IC_EDA/Questasim10.7/questasim/License/mentor.dat:/home/waves/.matla
+     b/R2018a_licenses:/opt/MATLAB/R2018a/licenses/license.dat:/opt/MATLAB/R2018a/licenses/*.lic 
+     Licensing error: -15,570. System Error: 115
+     #使用下面这一条命令解决
+     sudo ./matlab
+     ```
+
+   - ![image-20220505223606959](Archlinu-install-note/image-20220505223606959.png)
+
+   - ![image-20220505223621331](Archlinu-install-note/image-20220505223621331.png)
+
+   - 激活完成后还需要copy 补丁文件
+
+2. copy补丁文件
+
+   到crack文件夹下，找到`R2018a\bin\glnxa64\`复制到安装目录下，相同的位置覆盖原来的文件。
+
+3. [创建快捷方式](https://wiki.archlinux.org/title/MATLAB_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#%E5%AE%89%E8%A3%85%E6%97%B6library%E9%94%99%E8%AF%AF)
+
+   在`/usr/share/applications/`文件夹下创建`matlab.desktop`文件内容如下。完成后保存退出。
+
+   ```sh
+   #/usr/share/applications/matlab.desktop
+   
+   [Desktop Entry]
+   Version=R2018a
+   Type=Application
+   Terminal=false
+   MimeType=text/x-matlab
+   Exec=/opt/MATLAB/R2018a/bin/matlab -desktop
+   Name=MATLAB
+   Icon=matlab
+   Categories=Development;Math;Science
+   Comment=Scientific computing environment
+   StartupNotify=true
+   ```
+
+   
