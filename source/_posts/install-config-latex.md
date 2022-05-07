@@ -52,6 +52,28 @@ tags:	latex
 
 安装完成texlive 后，只要在vscode 的扩展中安装LaTeX Workshop 插件，就可以愉快的玩耍了。
 
+## [SwiftLaTeX](https://github.com/SwiftLaTeX/SwiftLaTeX)
+
+一个基于网页版的所见即所得的latex编辑器
+
+运行demo
+
+```text
+You can download the zip file from the release page.
+Unzip it to a local folder, and go to that folder. You will see many html files, which are use cases of SwiftLatex.
+Open a terminal and type python3 -m http.server . (assume you have python in your computer)
+You then can go to your browser and visit http://localhost:8000/ and see the demos.
+```
+
+如何编译：
+
+```text
+You can clone the repo and type make. :)
+You may need to set up the emscripten first.
+```
+
+[emscripten](https://emcc.zcopy.site/)
+
 ## 模板
 
 1. [overleaf](https://cn.overleaf.com/)
