@@ -43,3 +43,12 @@ git clone -b dev git@github.com:Taurus-ZSZ/Taurus-ZSZ.github.io.git /e/200-Learn
 
 就可以了
 
+
+
+## 如何拉取最新的文件
+
+```shell
+#1.首先确保你当前处于dev分支，然后运行下面的命令
+git pull origin dev 
+```
+

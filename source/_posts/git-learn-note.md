@@ -857,6 +857,39 @@ Date:   Thu Oct 14 18:01:56 2021 +0800
 
 ## 回到过去
 
+### 丢弃对工作区的改动
+
+回到上一次提交暂存区的版本
+
+**example**
+
+```sh
+[waves@waves-pc Taurus-ZSZ.github.io]$ git status
+位于分支 dev
+您的分支落后 'origin/dev' 共 5 个提交，并且可以快进。
+  （使用 "git pull" 来更新您的本地分支）
+
+尚未暂存以备提交的变更：
+  （使用 "git add <文件>..." 更新要提交的内容）
+  （使用 "git restore <文件>..." 丢弃工作区的改动）
+        修改：     README.md
+        修改：     source/_posts/Xilinx-Remote-Update.md
+
+修改尚未加入提交（使用 "git add" 和/或 "git commit -a"） 
+
+```
+
+在上面的这个例子中我想丢弃工作区的改动，只需要按照提示输入git restore xxx 就好了
+
+```bash
+git restore README.md
+git restore source/_posts/Xilinx-Remote-Update.md
+```
+
+**总结：**这种方法对付少量文件是可以，当对付多个文件是就有点不好使了,应该还有其他的方法。
+
+
+
 
 
 ![image-20211014212905247](git-learn-note/image-20211014212905247.png)
