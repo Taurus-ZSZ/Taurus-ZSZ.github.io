@@ -152,6 +152,216 @@ pacman -S python-setuptools
 
 
 
+## Docker
+
+修改docker 的存储位置，避免docker 占用过多的空间。
+
+### 将docker中的GUI应用显示到本机上
+
+```shell
+#将docker中的GUI应用显示到本机上。
+#1、archlinux 安装xorg-xhost
+
+sudo pacman -S xorg-xhost
+
+#2、在主机上运行 
+sudo xhost +
+#3、启动docker容器
+
+docker run -it -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix$DISPLAY -e GDK_SCALE -e GDK_DPI_SCALE --name quartus1 yitiandelan/quartus:18.1 /bin/bash
+
+#4、在容器里面启动Gui应用。
+/opt/..../bin/quartus
+```
+
+## archlinux GPG 错误
+
+
+
+```shell
+sudo pacman -S archlinux-keyring && sudo pacman -Syu
+sudo pacman -S archlinuxcn-keyring
+
+```
+
+## 解压zip 文件
+
+安装7zip
+
+```shell
+sudo pacman -S p7zip
+
+#例如解压 xxx.zip
+7z x -o新文件夹 xxx.zip # 保留原始文件结构
+```
+
+## archlinux 安装quartus 
+
+```shell
+sudo pacman -S noto-fonts adobe-source-han-sans-cn-fonts freetype2 fontconfig 
+
+sudo pacman -S lib32-expat lib32-fontconfig lib32-freetype2 lib32-glibc lib32-gtk2         lib32-libcanberra lib32-libpng lib32-libice lib32-libsm lib32-util-linux lib32-ncurses lib32-zlib         lib32-libx11 lib32-libxau lib32-libxdmcp lib32-libxext lib32-libxft lib32-libxrender lib32-libxt lib32-libxtst 
+
+sudo pacman -S  git libpng12 tcl lsb-release 
+
+```
+
+## archlinux 安装计算器
+
+[speedcrunch](https://speedcrunch.org/) 
+
+```shell
+ sudo pacman -S speedcrunch 
+```
+
+## Deepin QQ 非中文模式下中文显示黑框，可以调用输入法，但是仍然为黑框
+
+```shell
+#修改桌面图表的这一行
+Exec="/opt/apps/com.qq.im.deepin/files/run.sh" -u %u
+改为：
+Exec=LC_ALL=zh_CN.UTF-8 "/opt/apps/com.qq.im.deepin/files/run.sh" -u %u
+```
+
+## openocd install
+
+
+
+安装位置
+
+/usr/local/share/openocd
+
+
+
+```shell
+openocd -c 'adapter driver ftdi; ftdi_vid_pid 0x0403 0x6014; adapter speed 100;transport select jtag;init;jtag init;exit;'
+
+```
+
+
+
+## MBFTDI
+
+```shell
+ldd libjtag_hw_mbftdi-blaster.so 
+
+pacman -Qo /usr/lib/libftd2xx.so /usr/include/ftd2xx.h /usr/lib/libusb-1.0.so
+
+pacman -Qo /usr/lib/libstdc++.so.6 /usr/lib/libgcc_s.so.1 
+
+```
+
+
+
+## install ftdi2XX 驱动
+
+## 
+
+```shell
+1、下载驱动包：libftd2xx-x86_64-1.4.22.tgz
+2、解压 
+tar -zxvf ./libftd2xx-x86_64-1.4.22.tgz
+3、进入解压文件 打开readme.txt
+
+D2XX for Linux
+--------------
+
+As Linux distributions vary these instructions are a guide to installation 
+and use.  FTDI has tested the driver with LTS Ubuntu distributions for 
+x86 and x86_64 architectures, and Raspbian on Raspberry Pi.
+
+FTDI developed libftd2xx primarily to aid porting Windows applications 
+written with D2XX to Linux.  We intend the APIs to behave the same on
+Windows and Linux so if you notice any differences, please contact us 
+(see http://www.ftdichip.com/FTSupport.htm).
+
+FTDI do not release the source code for libftd2xx.  If you prefer to work
+with source code and are starting a project from scratch, consider using
+the open-source libFTDI.
+
+libftd2xx uses an unmodified version of libusb (http://libusb.info) which
+is distributed under the terms of the GNU Lesser General Public License 
+(see libusb/COPYING or http://www.gnu.org/licenses).  Source code for 
+libusb is included in this distribution.
+
+
+
+Installing the D2XX shared library and static library.
+------------------------------------------------------
+
+1.  tar xfvz libftd2xx-x86_64-1.4.22.tgz
+
+This unpacks the archive, creating the following directory structure:
+
+    build
+        libftd2xx        (re-linkable objects)
+        libusb           (re-linkable objects)
+        libftd2xx.a      (static library)
+        libftd2xx.so.1.4.22   (dynamic library)
+        libftd2xx.txt    (platform-specific information)
+    examples
+    libusb               (source code)
+    ftd2xx.h
+    WinTypes.h
+
+2.  cd build
+
+3.  sudo -s 
+  or, if sudo is not available on your system: 
+    su
+
+Promotes you to super-user, with installation privileges.  If you're
+already root, then step 3 (and step 7) is not necessary.
+
+4.  cp libftd2xx.* /usr/lib
+
+Copies the libraries to a central location.
+
+5.  chmod 0755 /usr/lib/libftd2xx.so.1.4.22
+
+Allows non-root access to the shared object.
+
+6.  ln -sf /usr/lib/libftd2xx.so.1.4.22 /usr/lib/libftd2xx.so
+
+Creates a symbolic link to the 1.4.22 version of the shared object.
+
+7.  cd ..
+    cp ftd2xx.h  /usr/include
+    cp WinTypes.h  /usr/include
+	
+Copies the header files to a central location. 
+
+8.  ldconfig -v
+
+Update the linker shared object cache to include the newly installed library.
+
+9.  exit
+
+Ends your super-user session.
+```
+
+## IC_EDA
+
+缺失 libnuma.so.1
+
+```shell
+sudo pacman -S numactl
+```
+
+
+
+archlinux lmgrd遇到lmgrd: No such file or directory
+
+```shel
+sudo pacman -S ld-lsb
+```
+
+lmg_synopsys
+
+
+
+
+
 # ubuntu 更新软件
 
 ```shell
