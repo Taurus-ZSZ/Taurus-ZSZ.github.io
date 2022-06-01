@@ -1,10 +1,10 @@
 ---
-title: Pluto_SDR_note
+title: ADI_Pluto_SDR_note
 date: 2022-05-07 13:22:32
 tags: AD936X
 ---
 
-# Pluto SDR 入门笔记1
+# ADI_Pluto SDR 入门笔记1
 
 ## Pluto SDR 参考资料
 

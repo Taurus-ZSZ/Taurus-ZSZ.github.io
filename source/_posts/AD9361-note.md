@@ -89,7 +89,7 @@ tags: AD936X
 
 ###  no-Os 开箱
 
-1. 下载源码：**源码已经下载好了**在`.\ADI_data\src`文件夹下
+1. [下载源码](https://github.com/analogdevicesinc/no-OS)：**源码已经下载好了**在`.\ADI_data\src`文件夹下
 
 2. [Building HDL](https://wiki.analog.com/resources/fpga/docs/build)
 

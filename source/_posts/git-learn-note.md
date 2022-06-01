@@ -393,6 +393,8 @@ git status
 # git commit -m "消息内容"    提交暂存区中的内容到本地仓库 -m 提交信息
 ```
 
+### .gitignore  文件
+
 
 
 > 忽略文件
@@ -415,6 +417,51 @@ git status
 build/       #忽略build/目录下的所有文件
 doc/*.txt    #会忽略 doc/notes.txt 但不包括 doc/server/arch.txt
 ```
+
+#### 如何从被忽略的文件夹中不忽略指定文件夹
+
+> 情景：
+>
+> 比如我开发FPGA尤其是zynq系列，按照我现在使用filelist模式的创建工程的方式，在纯FPGA端已经将源码文件，与生成文件进行了分离，比如我的源码都放在了src文件夹里,工程的编译输出都在work文件夹中。但是使用zynq的工程中，会有一个生成一个sdk的文件，并且这个sdk的文件夹默认在work文件夹下，所以如果想要不忽略sdk文件夹下相关工程的src源码文件该怎么版呢？？下面的方法就可搞定这个。
+
+参考链接
+
+[git官方gitignore链接](https://git-scm.com/docs/gitignore)
+
+[在gitignore中设置不忽略的文件（夹）](https://blog.csdn.net/CalShell/article/details/52670175)
+
+[.gitignore规则：在已忽略文件夹中不忽略指定文件或文件夹](https://blog.csdn.net/kaysenliang/article/details/122203404)
+
+```sh
+*.xlsx#
+*.ods#
+
+*.bak
+
+#说明一下：在gitignore中设置不忽略的文件（夹），就不能跳文件的层级
+
+#具体说明一下：
+#忽略掉work子文件夹下的所有文件夹
+**/work/*
+#不忽略掉work子文件夹下的xxx.sdk文件夹
+!**/work/*.sdk/
+#忽略掉xxx.sdk子文件夹下下面的文件或文件夹
+**/work/*.sdk/.metadata/
+**/work/*.sdk/.sdk/
+**/work/*.sdk/*_bsp/
+**/work/*.sdk/RemoteSystemsTempFiles/
+**/work/*.sdk/*_hw_platform_*/
+**/work/*.sdk/webtalk/
+**/work/*.sdk/*.hdf
+**/work/*.sdk/*.log
+#经过上面的操作，已经只剩下sdk文件夹下的工程文件
+#下面是将sdk工程文件夹下的 debug文件夹和 .cproject .project 忽略掉，只剩下src文件
+**/work/**/Debug/
+**/work/**/.cproject
+**/work/**/.project
+```
+
+
 
 
 
@@ -857,9 +904,9 @@ Date:   Thu Oct 14 18:01:56 2021 +0800
 
 ## 回到过去
 
-### 丢弃对工作区的改动
+#### 丢弃对工作区的改动
 
-回到上一次提交暂存区的版本
+回到上一次提交本地仓库的版本
 
 **example**
 
@@ -881,12 +928,111 @@ Date:   Thu Oct 14 18:01:56 2021 +0800
 
 在上面的这个例子中我想丢弃工作区的改动，只需要按照提示输入git restore xxx 就好了
 
+**单个文件：**
+
 ```bash
 git restore README.md
 git restore source/_posts/Xilinx-Remote-Update.md
 ```
 
+**多个文件的丢弃：**
+
+example 2
+
+```sh
+[waves@waves-pc FPGA_S9]$ git status
+位于分支 master
+您的分支与上游分支 'origin/master' 一致。
+
+尚未暂存以备提交的变更：
+  （使用 "git add/rm <文件>..." 更新要提交的内容）
+  （使用 "git restore <文件>..." 丢弃工作区的改动）
+        修改：     .gitignore
+        删除：     02_pl_proj/01_led/work/01_led.sdk/hello/src/Xilinx.spec
+        删除：     02_pl_proj/01_led/work/01_led.sdk/hello/src/helloworld.c
+        删除：     02_pl_proj/01_led/work/01_led.sdk/hello/src/lscript.ld
+        删除：     02_pl_proj/01_led/work/01_led.sdk/hello/src/platform.c
+        删除：     02_pl_proj/01_led/work/01_led.sdk/hello/src/platform.h
+        删除：     02_pl_proj/01_led/work/01_led.sdk/hello/src/platform_config.h
+
+未跟踪的文件:
+  （使用 "git add <文件>..." 以包含要提交的内容）
+        03_ps_proj/11_PL_RW_PS_DDR_V5/
+
+修改尚未加入提交（使用 "git add" 和/或 "git commit -a"）
+
+```
+
+从暂存区恢复到工作区，丢弃工作区的改动
+
+git restore 可以恢复多个文件
+
+```sh
+[waves@waves-pc FPGA_S9]$ git restore 02_pl_proj/01_led/work/01_led.sdk/*
+[waves@waves-pc FPGA_S9]$ git status
+位于分支 master
+您的分支与上游分支 'origin/master' 一致。
+
+尚未暂存以备提交的变更：
+  （使用 "git add <文件>..." 更新要提交的内容）
+  （使用 "git restore <文件>..." 丢弃工作区的改动）
+        修改：     .gitignore
+
+未跟踪的文件:
+  （使用 "git add <文件>..." 以包含要提交的内容）
+        03_ps_proj/11_PL_RW_PS_DDR_V5/
+
+修改尚未加入提交（使用 "git add" 和/或 "git commit -a"）
+
+```
+
 **总结：**这种方法对付少量文件是可以，当对付多个文件是就有点不好使了,应该还有其他的方法。
+
+
+
+#### 撤销对暂存区的修改
+
+git add * 添加了大量文件到暂存区，想撤销怎么办，(其实是撤销对暂存区的修改)
+
+比如下面这种情况：
+
+```sh
+[waves@waves-pc test]$ git add *
+[waves@waves-pc test]$ git status
+位于分支 master
+要提交的变更：
+  （使用 "git restore --staged <文件>..." 以取消暂存）
+        新文件：   00_Doc/README.md
+        新文件：   00_Doc/proj_template/src/00_CMD/bit_convert_program.tcl
+        新文件：   00_Doc/proj_template/src/00_CMD/fpga_script_run.py
+        新文件：   00_Doc/proj_template/src/01_Constraints/filelist.f
+        新文件：   00_Doc/proj_template/src/01_Constraints/pins.xdc
+        新文件：   00_Doc/proj_template/src/01_Constraints/timing.xdc
+        新文件：   00_Doc/proj_template/src/02_IP_Core/filelist.f
+        新文件：   00_Doc/proj_template/src/04_Tb/filelist.f
+        新文件：   00_Doc/proj_template/src/S9_top.sv
+        新文件：   00_Doc/proj_template/src/filelist.f
+        新文件：   00_Doc/proj_template/src/global_reset.v
+  
+  #向上面的这些文件我添加错了，我想撤销掉对这些添加，
+  #可以使用下面的指令进行操作
+[waves@waves-pc test]$ git reset HEAD 
+[waves@waves-pc test]$ git status
+位于分支 master
+未跟踪的文件:
+  （使用 "git add <文件>..." 以包含要提交的内容）
+        00_Doc/
+        01_Hardware/
+        02_pl_proj/
+        03_ps_proj/
+        04_linux/
+        README.md
+
+提交为空，但是存在尚未跟踪的文件（使用 "git add" 建立跟踪）
+[waves@waves-pc test]$ 
+
+# 可以看到上面文件成功撤销了。
+```
 
 
 
@@ -1560,11 +1706,47 @@ checkout :可以将暂存区和工作目录覆盖掉
 
 ## 远程仓库
 
+### Linux git clone 开代理
+
+```shell
+#终端代理
+
+# 在终端中使用github时好像没有用代理，使用下面的命令手动启用代理
+[waves@waves-pc 000-ToDo]$ export https_proxy=http://127.0.0.1:8889
+[waves@waves-pc 000-ToDo]$ export http_proxy=http://127.0.0.1:8889
+```
 
 
 
+# Win 下的Git
+
+## git log 中文乱码解决
+
+在之前的代码提交有中文备注，使用git log 查看代码的是时候会有乱码 
 
 
+
+解决办法
+
+1. 运行Git bash 窗口，在该窗口导航条右键，选择->options -> text 找到下面的两处
+
+   1. Locale: 选择zh_CN
+   2. Charector set:选择UTF-8
+
+2. 在我的电脑上已经可以进行中文显示了。下面的设置参考
+
+3. 到Git Bash 命令行窗口进行如下设置
+
+   ```sh
+   #设置提交时使用utf-8编码集
+   git config --global i18n.commitencoding utf-8
+   #设置输出log时使用utf-8编码集
+   git config --global i18n.logoutputencoding utf-8
+   #设置LESS使用utf-8编码集
+   export LESSCHARSET=utf-8
+   ```
+
+   
 
 
 

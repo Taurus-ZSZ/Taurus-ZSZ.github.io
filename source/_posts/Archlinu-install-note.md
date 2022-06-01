@@ -184,7 +184,9 @@ sudo pacman -S archlinuxcn-keyring
 
 ```
 
-## 解压zip 文件
+
+
+## 压缩与解压zip 文件
 
 安装7zip
 
@@ -193,6 +195,8 @@ sudo pacman -S p7zip
 
 #例如解压 xxx.zip
 7z x -o新文件夹 xxx.zip # 保留原始文件结构
+#压缩：
+7z a [目标文件名].7z [原文件名/目录名]
 ```
 
 ## archlinux 安装quartus 
@@ -439,8 +443,20 @@ docker pull jhao104/proxy_pool
 docker run --env DB_CONN=redis://@173.82.54.177:6379/0 -p 5010:5010 jhao104/proxy_pool:latest
 ```
 
+3、终端代理
+
+```sh
+# 在终端中使用github时好像没有用代理，使用下面的命令手动启用代理
+export https_proxy=http://127.0.0.1:8889
+[waves@waves-pc 000-ToDo]$ export http_proxy=http://127.0.0.1:8889
+```
+
+
+
+
 
 # ubuntu 16.04 安装python3.6后无法打开终端
+
 安装python3.6后 快捷键Ctrl+alt+T不行，在Applications里面点击图标也打不开：
 ##参考链接
 安装python3.6 https://tding.top/archives/3868725a.html
