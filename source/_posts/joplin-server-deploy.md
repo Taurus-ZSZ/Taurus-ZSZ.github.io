@@ -214,6 +214,8 @@ admin
 
 ###  joplin_server Docker 部署流程
 
+[官方文档](https://github.com/laurent22/joplin/tree/dev/packages/server)
+
 **前提条件：**
 
 1. 安装服务器上安装 docker
@@ -259,8 +261,8 @@ admin
       # SQLite so database settings are not needed.
       # =============================================================================
       #
-      APP_BASE_URL=http://localhost:22300
-      APP_PORT=22300
+      APP_BASE_URL=http://localhost:22301	#备注这个域名或者IP地址一定要是被访问的那个而且这个端口是访问者的端口号， 使用http://localhost:22301 访问
+      APP_PORT=22300	#这个是docker server 的
       # MAX_TIME_DRIFT=1000000
       ```
 
@@ -286,11 +288,114 @@ admin
    docker run -it --name joplin_server1 -v joplin:/home/joplin --env-file /home/waves/joplin/.env -p 22300:22300 joplin/server:latest
    ```
 
+   ubuntu 运行容器
+   
+   ```bash
+   docker run -it --name joplin_server -v joplin:/home/joplin --env-file /home/zsz/docker/joplin/.env -p 22300:22300 joplin/server:latest
+   
+   docker run -it --name joplin_server1 -v joplin:/home/joplin --env-file /home/zsz/docker/joplin/.env -p 22301:22300 joplin/server:latest
+   
+   ```
+   
+
+备注：
+
+ipv6的80端口访问joplin是可以的
+
+```bash
+#APP_BASE_URL=http://localhost:22300
+#APP_BASE_URL=http://192.168.1.102:22301
+APP_BASE_URL=http://server.proton-core.xyz
+APP_PORT=22300
+# MAX_TIME_DRIFT=1000000
+```
+
+使用默认的sql数据库
+
+```bash
+#http://server.proton-core.xyz:22300也可以访问
+
+#APP_BASE_URL=http://localhost:22300
+#APP_BASE_URL=http://192.168.1.102:22301
+APP_BASE_URL=http://server.proton-core.xyz:22300
+APP_PORT=22300
+# MAX_TIME_DRIFT=1000000
+zsz@ubuntu-server:~/docker/joplin$
+
+```
+
+注意<font color='red'>开启代理后会导致域名访问</font>的<font color='red'>失败</font>
+
+### 使用postgres 数据库
+
+```bash
+#使用docke-compose
+docker-compose --file  ./docker-compose.yml up
+#后台运行
+docker-compose --file ./docker-compose.yml up -d
+
+
+```
+
+
+
+邮箱
+
+对于自己编写的邮件发送程序，需要知道对应邮箱的[smtp](https://so.csdn.net/so/search?q=smtp&spm=1001.2101.3001.7020)服务器，下面列举了些部分邮箱及对应的smtp服务器和支持的协议
+
+| 邮箱    | smtp服务器            | 支持的协议（可能有遗漏）    |
+| ------- | --------------------- | --------------------------- |
+| gmail   | smtp.gmail.com        | TLS/ STARTTLS（TLS）        |
+| qq      | smtp.qq.com           | SSL/TLS/ STARTTLS（TLS）    |
+| foxmail | smtp.exmail.qq.com    | SSL/TLS/ STARTTLS（TLS）    |
+| outlook | smtp-mail.outlook.com | STARTTLS（TLS）             |
+| 雅虎    | smtp.mail.yahoo.com   | TLS/STARTTLS（TLS）         |
+| 网易163 | smtp.163.com          | SSL/TLS                     |
+| hotmail | smtp.live.com         | STARTTLS（TLS）             |
+| icloud  | smtp.mail.me.com      | STARTTLS（TLS）             |
+| Yandex  | smtp.yandex.ru        | SSL/TLS/STARTTLS（SSL/TLS） |
+| GMX     | smtp.gmx.com          | TLS/STARTTLS                |
+| 新浪    | smtp.sina.com         | SSL/TLS/STARTTLS（SSL/TLS） |
+| aol     | smtp.aol.com          | TLS／STARTTLS               |
+| rediff  | smtp.rediffmail.com   | SSL/TLS/STARTTLS（SSL/TLS） |
+
+------
+
+### 相关邮箱配置说明：
+
+对于[ssl](https://so.csdn.net/so/search?q=ssl&spm=1001.2101.3001.7020)/tls加密，使用465端口
+ 对于starttls 一般使用587端口
+
+```bash
+qq
+qq账户登入所需要的密码不是平时登入使用的密码，需去账户下生成，具体路径如下：
+进入邮箱账户–> 设置 –> 账户 –> 生成授权码
+将上面生成的授权码作为登入密码即可。
+
+```
+
+
+
+### 反向代理
+
+1. [参考的反向代理文章443](https://blog.csdn.net/u013568040/article/details/124027860)    [参考非443端口](https://blog.csdn.net/tiancityycf/article/details/121685698)
+
+2. 需要两个地方的配置 
+
+   nginx 的配置文件都在nginx文件夹中了
+   
+   ```bash
+   sudo vim nginx.conf # 这个文件中的 #include /etc/nginx/conf.d/joplin_proxy3;
+   								 # include /etc/nginx/conf.d/joplin_proxy443;
+   								 #负责开启相应的代理服务
+   sudo vim conf.d/joplin_proxy3    #这个代理的是446端口到22300  对应的 docker-compose.yml
+   
+   conf.d/joplin_proxy443 #这个代理的是443端口，这个端口可能是服务商没有开，手机无法登录 对应的docker-compose443.yml
+   ```
+   
    
 
 ntp 与ntpdate 服务同步时间
-
-
 
 centos
 
@@ -299,11 +404,6 @@ centos
 13 May 23:20:52 ntpdate[11119]: bind() fails: Permission denied
 [proton@proton-pc joplin]$ sudo ntpdate pool.ntp.org
 13 May 23:36:10 ntpdate[12406]: adjust time server 108.61.73.243 offset 0.075971 sec
-
-
-
-
-
 ```
 
 

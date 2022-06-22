@@ -35,6 +35,11 @@ docker是内核级的虚拟化，一个实体机上可以运行很多个容器�
 
 ## Docker 安装
 
+docker 现在有两个版本，一个是Docker Desktop，另一个是Docker Engine。参考文档链接
+
+- [Docker Desktop Doc](https://docs.docker.com/desktop/)
+- [Docker Engine Doc](https://docs.docker.com/engine/)
+
 ### Docker 的基本组成
 
 
@@ -2134,37 +2139,50 @@ S: 472ac217c6029ffe0316c6e005f455320c2850a5 172.38.0.15:6379
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 企业实战
 
-docker compose
+## Docker compose
+
+### 安装docker-compose
+
+下载docker-compose 两种方法
+
+```bash
+#方法一
+#1、
+https://github.com/docker/compose/releases/
+https://github.com/docker/compose/releases/download/v2.6.0/docker-compose-linux-x86_64
+#2、上传服务器
+```
+
+
+
+```bash
+sudo cp /home/ftp/Up/docker-compose-linux-x86_64 /usr/local/bin/docker-compose
+#方法二
+curl -SL https://github.com/docker/compose/releases/download/v2.6.0/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
+#上面的两个方法任选一个
+sudo chmod +x /usr/local/bin/docker-compose  
+ls -al /usr/local/bin/docker-compose
+sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+
+```
+
+### docker-compose常用命令
+
+```bash
+docker-compose                # 拉取镜像
+docker-compose up -d nginx    # 运行nginx容器
+docker-compose up             # 运行所有容器 前台
+docker-compose up -d          # 运行所有容器 后台
+docker-compose ps             # 查看容器运行状态
+docker-compose stop			  # 停止运行的容器 但不会删除它们
+docker-compose down           # 停止容器和容器网络	并且删除已停止的容器以及已创建的所有网络
+#添加-v标记以删除所有卷。这对于通过运行在环境中进行完全重置非常有用docker-compose down -v。 
+docker-compose rm nginx       # 删除nginx容器
+
+
+```
 
 
 
@@ -2173,34 +2191,6 @@ docker Swarm
 
 
 CI/CD jenkins 流水线！！
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

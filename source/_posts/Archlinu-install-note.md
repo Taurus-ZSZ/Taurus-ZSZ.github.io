@@ -174,6 +174,36 @@ docker run -it -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix$DISPLAY -e GDK_S
 /opt/..../bin/quartus
 ```
 
+
+
+```sh
+docker run -it -v /home/proton/app/config/config.toml:/app/config --name tsrrr 7bc49bdacfa2 /app/rly -config config/config.toml
+docker run -it -v /home/proton/app/config/rly.toml:/bin/rly.toml --name tsdrrr 7bc49bdacfa2 /bin/rly -config config/rly.toml
+
+
+在学习docker的时候，经常会编译docker镜像，很多都是基于上一个Dockerfile修改编译而来，因此出现了很多REPOSITORY 和 TAG 为 none 的镜像。每次 docker images 查看镜像，都会列出一长串，有的时候一屏还展示不全，所以就想要删除某些镜像。但是一个一个删又很费时，那就只有批量删除了。
+使用 grep 函数查找出所有包含 none 的镜像，然后使用 awk 函数找出所有的镜像ID，并将它们作为参数，使用 docker rmi 命令删除所有包含 none 的镜像。
+
+# 查询所有匹配上的docker镜像ID
+$ docker images | grep none | awk '{print $3}'
+
+docker ps -a | grep 7bc49bdacfa2 | awk '{print $3}'
+docker images | grep none | awk '{print $3}' | xargs docker rmi
+
+docker ps -a | grep 7bc49bdacfa2 | awk '{print $1}'
+docker ps -a | grep 7bc49bdacfa2 | awk '{print $1}' | xargs docker rm
+
+docker ps -a | grep e8e9f8df3fbc | awk '{print $1}'
+docker ps -a | grep e8e9f8df3fbc | awk '{print $1}' | xargs docker rm
+
+
+docker images | grep jhao104/proxy_pool:latest | awk '{print $3}' | xargs docker rmi
+```
+
+
+
+
+
 ## archlinux GPG 错误
 
 
@@ -389,27 +419,7 @@ do-release-upgrade: Ubuntu官方推荐的系统升级方式,若加参数-d还可
 
 
 ```shell
-docker run -it -v /home/proton/app/config/config.toml:/app/config --name tsrrr 7bc49bdacfa2 /app/rly -config config/config.toml
-docker run -it -v /home/proton/app/config/rly.toml:/bin/rly.toml --name tsdrrr 7bc49bdacfa2 /bin/rly -config config/rly.toml
 
-
-在学习docker的时候，经常会编译docker镜像，很多都是基于上一个Dockerfile修改编译而来，因此出现了很多REPOSITORY 和 TAG 为 none 的镜像。每次 docker images 查看镜像，都会列出一长串，有的时候一屏还展示不全，所以就想要删除某些镜像。但是一个一个删又很费时，那就只有批量删除了。
-使用 grep 函数查找出所有包含 none 的镜像，然后使用 awk 函数找出所有的镜像ID，并将它们作为参数，使用 docker rmi 命令删除所有包含 none 的镜像。
-
-# 查询所有匹配上的docker镜像ID
-$ docker images | grep none | awk '{print $3}'
-
-docker ps -a | grep 7bc49bdacfa2 | awk '{print $3}'
-docker images | grep none | awk '{print $3}' | xargs docker rmi
-
-docker ps -a | grep 7bc49bdacfa2 | awk '{print $1}'
-docker ps -a | grep 7bc49bdacfa2 | awk '{print $1}' | xargs docker rm
-
-docker ps -a | grep e8e9f8df3fbc | awk '{print $1}'
-docker ps -a | grep e8e9f8df3fbc | awk '{print $1}' | xargs docker rm
-
-
-docker images | grep jhao104/proxy_pool:latest | awk '{print $3}' | xargs docker rmi
 ```
 
 ```shell
